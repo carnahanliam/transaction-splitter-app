@@ -1,0 +1,25 @@
+POST http://localhost:3001/api/transactions
+Content-Type: application/json
+
+{
+  "title": "dinner, Liam paid",
+  "total": 75,
+  "comments": "dinner with anj and joe, Liam paid",
+  "userSplits": [
+    {
+      "userId": "6245d7d2a8836361b311377f",
+      "percent": 0.33,
+      "payer": true
+    },
+    {
+      "userId": "6245d7e6a8836361b3113783",
+      "percent": 0.33,
+      "payer": false
+    },
+    {
+      "userId": "6245de9ba8836361b3113848",
+      "percent": 0.34,
+      "payer": false
+    }
+  ]
+}

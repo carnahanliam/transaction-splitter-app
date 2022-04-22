@@ -1,0 +1,15 @@
+PUT http://localhost:3001/api/users/6245de9ba8836361b3113848
+Content-Type: application/json
+
+{
+  "name": "Joe Blow",
+  "username": "joeblow",
+  "friends": [
+    {
+      "userId": "6245d7e6a8836361b3113783"
+    },
+    {
+      "userId": "6245d7d2a8836361b311377f"
+    }
+  ]
+}
