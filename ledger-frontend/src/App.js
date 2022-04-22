@@ -4,19 +4,46 @@ import userService from './services/users'
 import loginService from './services/login'
 import LoginForm from './components/LoginForm'
 import FriendsList from './components/FriendsList'
-import Navbar from './components/Navbar'
 import TransactionForm from './components/TransactionForm'
 import SingleFriendView from './components/SingleFriendView'
 import SingleTransactionView from './components/SingleTransactionView'
 import TransactionsList from './components/TransactionsList'
 import AccountSettings from './components/AccountSettings'
-import Navbar2 from './components/Navbar2'
+import Navbar from './components/Navbar'
 // import Footer from './components/Footer'
+import { createTheme, ThemeProvider } from '@mui/material/styles'
+import getDesignTokens from './themeMUI'
 
 const App = () => {
   const loggedInUser = JSON.parse(window.localStorage.getItem('LoggedInUser'))
   const initialState = loggedInUser ? loggedInUser : null
   const navigate = useNavigate()
+
+  const [paletteMode, setPaletteMode] = useState('light')
+
+  const changePalette = () => {
+    setPaletteMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'))
+  }
+
+  // const paletteToggle = (
+  //   <Box
+  //     sx={{
+  //       display: 'flex',
+  //       width: '100%',
+  //       alignItems: 'center',
+  //       justifyContent: 'center',
+  //       bgcolor: 'background.default',
+  //       color: 'text.primary',
+  //       borderRadius: 1,
+  //       p: 3,
+  //     }}
+  //   >
+  //     {paletteMode} mode
+  //     <IconButton sx={{ ml: 1 }} onClick={changePalette}>
+  //       {paletteMode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
+  //     </IconButton>
+  //   </Box>
+  // )
 
   const [currentUser, setCurrentUser] = useState(initialState)
   const [friends, setFriends] = useState([])
@@ -106,7 +133,7 @@ const App = () => {
 
   return (
     <>
-      <div className="App">
+      <ThemeProvider theme={createTheme(getDesignTokens(paletteMode))}>
         {currentUser === null && (
           <div>
             <LoginForm handleLogin={handleLogin} />
@@ -116,7 +143,12 @@ const App = () => {
         {currentUser !== null && (
           <>
             <div>
-              <Navbar2 currentUser={currentUser} handleLogout={handleLogout}>
+              <Navbar
+                currentUser={currentUser}
+                handleLogout={handleLogout}
+                paletteMode={paletteMode}
+                changePalette={changePalette}
+              >
                 {/* <Navbar currentUser={currentUser} handleLogout={handleLogout} /> */}
                 {/* <h2>{currentUser.name} logged in</h2> */}
                 {/* <h1>Ledger App</h1> */}
@@ -181,11 +213,11 @@ const App = () => {
                     }
                   />
                 </Routes>
-              </Navbar2>
+              </Navbar>
             </div>
           </>
         )}
-      </div>
+      </ThemeProvider>
       {/* <Footer /> */}
     </>
   )
