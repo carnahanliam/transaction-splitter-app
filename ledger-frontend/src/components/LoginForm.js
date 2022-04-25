@@ -172,7 +172,7 @@ const LoginForm = ({ handleLogin }) => {
             }}
           >
             <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-              <LockOutlinedIcon />
+              <LockOutlinedIcon sx={{ color: '#fff' }} />
             </Avatar>
             <Typography component="h1" variant="h5">
               Sign in

@@ -5,29 +5,50 @@ const getDesignTokens = (mode) => ({
       ? {
           // palette values for light mode
           primary: {
-            main: '#6969ad',
+            main: '#1076f2',
           },
           secondary: {
-            main: '#b549c7',
+            main: '#1076f2',
           },
           background: {
-            default: '#dcdce4',
-            paper: '#f1f1f1',
+            default: '#f4f5f7',
+            paper: '#fff',
           },
         }
       : {
           // palette values for dark mode
           primary: {
-            main: '#6969ad',
+            main: '#1076f2',
           },
           secondary: {
-            main: '#b549c7',
+            main: '#1076f2',
           },
           background: {
-            default: '#2a2836',
-            paper: '#3f4254',
+            default: '#070d19',
+            paper: '#151d2e',
           },
         }),
+  },
+  components: {
+    MuiPaper: {
+      variants: [
+        {
+          props: { variant: 'card' },
+          style: {
+            borderRadius: '14px',
+            border: '1px solid #d8d8d821',
+            boxShadow: '0px 3px 12px rgb(0 0 0 / 5%)',
+          },
+        },
+      ],
+      // styleOverrides: {
+      //   root: {
+      //     borderRadius: '14px',
+      //     border: '1px solid #d8d8d821',
+      //     boxShadow: '0px 3px 12px rgb(0 0 0 / 5%)',
+      //   },
+      // },
+    },
   },
 })
 

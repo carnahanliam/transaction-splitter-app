@@ -98,16 +98,17 @@ const NavBar = (props) => {
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           ml: { sm: `${drawerWidth}px` },
           bgcolor: 'transparent',
+          backgroundImage: 'none',
           boxShadow: 'none',
-          mt: 3.5,
+          mt: 3,
         }}
       >
         <Toolbar
           sx={{
             height: 'min(12vh, 100px)',
-            px: 5,
+            // px: 5,
           }}
-          disableGutters
+          // disableGutters
         >
           <IconButton
             color="inherit"
@@ -163,7 +164,7 @@ const NavBar = (props) => {
         sx={{
           flexGrow: 1,
           mt: 'min(12vh, 100px)',
-          px: 5,
+          px: 3,
           pt: 5,
           width: { sm: `calc(100% - ${drawerWidth}px)` },
         }}

@@ -71,7 +71,12 @@ const TopBar = ({ handleLogout, currentUser }) => {
               <Avatar
                 alt={currentUser.name}
                 src={displayAvatar}
-                sx={{ width: 55, height: 55, borderRadius: '15px' }}
+                sx={{
+                  width: 50,
+                  height: 50,
+                  borderRadius: '15px',
+                  border: '1px solid #e2e2e2e8',
+                }}
                 // variant="rounded"
               />
             </IconButton>
