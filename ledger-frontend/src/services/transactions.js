@@ -1,7 +1,6 @@
 import axios from 'axios'
 
-const baseUrl =
-  'https://transaction-splitter-app.herokuapp.com/api/transactions'
+const baseUrl = '/api/transactions'
 
 const getAll = async () => {
   const response = await axios.get(baseUrl)
