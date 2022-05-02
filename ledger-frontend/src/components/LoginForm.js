@@ -10,8 +10,6 @@ import Typography from '@mui/material/Typography'
 // import Container from '@mui/material/Container'
 import Paper from '@mui/material/Paper'
 import Grid from '@mui/material/Grid'
-import { createTheme, ThemeProvider } from '@mui/material/styles'
-import Footer from './Footer'
 // import loginImage from '../uploads/finance-app-purple.svg'
 // import creditCardImg from '../uploads/Saly-credit-card.svg'
 import creditCardImg from '../uploads/Saly-credit-card-cropped.png'
@@ -20,8 +18,6 @@ import usingPhoneImg from '../uploads/Saly-using-phone-cropped.png'
 import blobShadowImg from '../uploads/blob.png'
 // import coinImg from '../uploads/Coin_perspective_matte.png'
 import './LoginForm.css'
-
-const theme = createTheme()
 
 const LoginForm = ({ handleLogin }) => {
   const [visible, setVisible] = useState('login')
@@ -46,7 +42,6 @@ const LoginForm = ({ handleLogin }) => {
   }
 
   return (
-    // <ThemeProvider theme={theme}>
     <Grid
       container
       component="main"
@@ -322,7 +317,6 @@ const LoginForm = ({ handleLogin }) => {
       </Grid>
       {/* <Footer xs={12} md={5} bgcolor="transparent" /> */}
     </Grid>
-    // </ThemeProvider>
   )
 }
 

@@ -5,7 +5,6 @@ import Box from '@mui/material/Box'
 import Paper from '@mui/material/Paper'
 import Typography from '@mui/material/Typography'
 import Avatar from '@mui/material/Avatar'
-import { Divider } from '@mui/material'
 
 const SingleTransactionView = ({ transactions, currentUser, paletteMode }) => {
   const match = useMatch('/transactions/:id')
@@ -233,7 +232,8 @@ const SingleTransactionView = ({ transactions, currentUser, paletteMode }) => {
               width: '40%',
             }}
           >
-            <Typography variant="h6">Comments</Typography>
+            {/* <Typography variant="h6">Comments </Typography> */}
+            <Typography variant="subtitle2">{comments}</Typography>
           </Paper>
         </Box>
       </Paper>

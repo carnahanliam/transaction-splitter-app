@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { findBalances } from '../utils/friendsHelper'
-import Loading from './Loading'
 import Box from '@mui/material/Box'
 import Paper from '@mui/material/Paper'
 import Typography from '@mui/material/Typography'
