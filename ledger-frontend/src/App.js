@@ -1,12 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import {
-  Routes,
-  Route,
-  // useNavigate
-} from 'react-router-dom'
+import { Routes, Route, useNavigate } from 'react-router-dom'
 import userService from './services/users'
-// import loginService from './services/login'
-// import LoginForm from './components/LoginForm'
+import loginService from './services/login'
+import LoginForm from './components/LoginForm'
 import FriendsList from './components/FriendsList'
 import TransactionForm from './components/TransactionForm'
 import SingleFriendView from './components/SingleFriendView'
@@ -19,7 +15,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles'
 import getDesignTokens from './themeMUI'
 
 const App = () => {
-  // const navigate = useNavigate()
+  const navigate = useNavigate()
 
   const loggedInUser = JSON.parse(window.localStorage.getItem('LoggedInUser'))
   const initialUserState = loggedInUser ? loggedInUser : null
@@ -82,24 +78,24 @@ const App = () => {
     }
   }, [currentUser, paletteMode])
 
-  // const handleLogin = async (event) => {
-  //   event.preventDefault()
+  const handleLogin = async (event) => {
+    event.preventDefault()
 
-  //   const formData = new FormData(event.currentTarget)
-  //   const username = formData.get('username')
-  //   const password = formData.get('password')
+    const formData = new FormData(event.currentTarget)
+    const username = formData.get('username')
+    const password = formData.get('password')
 
-  //   try {
-  //     const userLogin = await loginService.loginUser({ username, password })
-  //     const user = await userService.getUser([userLogin.id])
+    try {
+      const userLogin = await loginService.loginUser({ username, password })
+      const user = await userService.getUser([userLogin.id])
 
-  //     // window.localStorage.setItem('LoggedInUser', JSON.stringify(user))
-  //     setCurrentUser(user)
-  //     navigate('/')
-  //   } catch (err) {
-  //     throw err
-  //   }
-  // }
+      // window.localStorage.setItem('LoggedInUser', JSON.stringify(user))
+      setCurrentUser(user)
+      navigate('/')
+    } catch (err) {
+      throw err
+    }
+  }
 
   const handleLogout = (event) => {
     event.preventDefault()
@@ -128,90 +124,90 @@ const App = () => {
   return (
     <>
       <ThemeProvider theme={createTheme(getDesignTokens(paletteMode))}>
-        {/* {currentUser === null && (
+        {currentUser === null && (
           <div>
             <LoginForm handleLogin={handleLogin} />
           </div>
         )}
 
-        {currentUser !== null && ( */}
-        <>
-          <div>
-            <Navbar
-              currentUser={currentUser}
-              handleLogout={handleLogout}
-              paletteMode={paletteMode}
-              changePalette={changePalette}
-            >
-              {/* <Navbar currentUser={currentUser} handleLogout={handleLogout} /> */}
-              {/* <h2>{currentUser.name} logged in</h2> */}
-              {/* <h1>Ledger App</h1> */}
-              <Routes>
-                <Route
-                  path="/transactions"
-                  element={
-                    <AllTransactionsList
-                      transactions={transactions}
-                      currentUser={currentUser}
-                    />
-                  }
-                />
-                <Route
-                  path="/new-transaction"
-                  element={
-                    <TransactionForm
-                      friends={friends}
-                      currentUser={currentUser}
-                    />
-                  }
-                />
-                <Route
-                  path="/transactions/:id"
-                  element={
-                    <SingleTransactionView
-                      transactions={transactions}
-                      currentUser={currentUser}
-                      paletteMode={paletteMode}
-                    />
-                  }
-                />
-                <Route
-                  path="/friends/:id"
-                  element={
-                    <SingleFriendView
-                      friends={friends}
-                      transactions={transactions}
-                      currentUser={currentUser}
-                    />
-                  }
-                />
-                <Route
-                  path="/account/settings"
-                  element={
-                    <AccountSettings
-                      currentUser={currentUser}
-                      //  uploadedPhoto={uploadedPhoto}
-                      handlePhotoUpload={handlePhotoUpload}
-                      handlePhotoSubmit={handlePhotoSubmit}
-                    />
-                  }
-                />
-                <Route
-                  path="/"
-                  element={
-                    <FriendsList
-                      friends={friends}
-                      transactions={transactions}
-                      currentUser={currentUser}
-                      loading={loading}
-                    />
-                  }
-                />
-              </Routes>
-            </Navbar>
-          </div>
-        </>
-        {/* )} */}
+        {currentUser !== null && (
+          <>
+            <div>
+              <Navbar
+                currentUser={currentUser}
+                handleLogout={handleLogout}
+                paletteMode={paletteMode}
+                changePalette={changePalette}
+              >
+                {/* <Navbar currentUser={currentUser} handleLogout={handleLogout} /> */}
+                {/* <h2>{currentUser.name} logged in</h2> */}
+                {/* <h1>Ledger App</h1> */}
+                <Routes>
+                  <Route
+                    path="/transactions"
+                    element={
+                      <AllTransactionsList
+                        transactions={transactions}
+                        currentUser={currentUser}
+                      />
+                    }
+                  />
+                  <Route
+                    path="/new-transaction"
+                    element={
+                      <TransactionForm
+                        friends={friends}
+                        currentUser={currentUser}
+                      />
+                    }
+                  />
+                  <Route
+                    path="/transactions/:id"
+                    element={
+                      <SingleTransactionView
+                        transactions={transactions}
+                        currentUser={currentUser}
+                        paletteMode={paletteMode}
+                      />
+                    }
+                  />
+                  <Route
+                    path="/friends/:id"
+                    element={
+                      <SingleFriendView
+                        friends={friends}
+                        transactions={transactions}
+                        currentUser={currentUser}
+                      />
+                    }
+                  />
+                  <Route
+                    path="/account/settings"
+                    element={
+                      <AccountSettings
+                        currentUser={currentUser}
+                        //  uploadedPhoto={uploadedPhoto}
+                        handlePhotoUpload={handlePhotoUpload}
+                        handlePhotoSubmit={handlePhotoSubmit}
+                      />
+                    }
+                  />
+                  <Route
+                    path="/"
+                    element={
+                      <FriendsList
+                        friends={friends}
+                        transactions={transactions}
+                        currentUser={currentUser}
+                        loading={loading}
+                      />
+                    }
+                  />
+                </Routes>
+              </Navbar>
+            </div>
+          </>
+        )}
       </ThemeProvider>
       {/* <Footer /> */}
     </>
