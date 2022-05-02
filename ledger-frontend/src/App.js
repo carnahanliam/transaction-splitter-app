@@ -124,90 +124,90 @@ const App = () => {
   return (
     <>
       <ThemeProvider theme={createTheme(getDesignTokens(paletteMode))}>
-        {currentUser === null && (
+        {/* {currentUser === null && (
           <div>
             <LoginForm handleLogin={handleLogin} />
           </div>
         )}
 
-        {currentUser !== null && (
-          <>
-            <div>
-              <Navbar
-                currentUser={currentUser}
-                handleLogout={handleLogout}
-                paletteMode={paletteMode}
-                changePalette={changePalette}
-              >
-                {/* <Navbar currentUser={currentUser} handleLogout={handleLogout} /> */}
-                {/* <h2>{currentUser.name} logged in</h2> */}
-                {/* <h1>Ledger App</h1> */}
-                <Routes>
-                  <Route
-                    path="/transactions"
-                    element={
-                      <AllTransactionsList
-                        transactions={transactions}
-                        currentUser={currentUser}
-                      />
-                    }
-                  />
-                  <Route
-                    path="/new-transaction"
-                    element={
-                      <TransactionForm
-                        friends={friends}
-                        currentUser={currentUser}
-                      />
-                    }
-                  />
-                  <Route
-                    path="/transactions/:id"
-                    element={
-                      <SingleTransactionView
-                        transactions={transactions}
-                        currentUser={currentUser}
-                        paletteMode={paletteMode}
-                      />
-                    }
-                  />
-                  <Route
-                    path="/friends/:id"
-                    element={
-                      <SingleFriendView
-                        friends={friends}
-                        transactions={transactions}
-                        currentUser={currentUser}
-                      />
-                    }
-                  />
-                  <Route
-                    path="/account/settings"
-                    element={
-                      <AccountSettings
-                        currentUser={currentUser}
-                        //  uploadedPhoto={uploadedPhoto}
-                        handlePhotoUpload={handlePhotoUpload}
-                        handlePhotoSubmit={handlePhotoSubmit}
-                      />
-                    }
-                  />
-                  <Route
-                    path="/"
-                    element={
-                      <FriendsList
-                        friends={friends}
-                        transactions={transactions}
-                        currentUser={currentUser}
-                        loading={loading}
-                      />
-                    }
-                  />
-                </Routes>
-              </Navbar>
-            </div>
-          </>
-        )}
+        {currentUser !== null && ( */}
+        <>
+          <div>
+            <Navbar
+              currentUser={currentUser}
+              handleLogout={handleLogout}
+              paletteMode={paletteMode}
+              changePalette={changePalette}
+            >
+              {/* <Navbar currentUser={currentUser} handleLogout={handleLogout} /> */}
+              {/* <h2>{currentUser.name} logged in</h2> */}
+              {/* <h1>Ledger App</h1> */}
+              <Routes>
+                <Route
+                  path="/transactions"
+                  element={
+                    <AllTransactionsList
+                      transactions={transactions}
+                      currentUser={currentUser}
+                    />
+                  }
+                />
+                <Route
+                  path="/new-transaction"
+                  element={
+                    <TransactionForm
+                      friends={friends}
+                      currentUser={currentUser}
+                    />
+                  }
+                />
+                <Route
+                  path="/transactions/:id"
+                  element={
+                    <SingleTransactionView
+                      transactions={transactions}
+                      currentUser={currentUser}
+                      paletteMode={paletteMode}
+                    />
+                  }
+                />
+                <Route
+                  path="/friends/:id"
+                  element={
+                    <SingleFriendView
+                      friends={friends}
+                      transactions={transactions}
+                      currentUser={currentUser}
+                    />
+                  }
+                />
+                <Route
+                  path="/account/settings"
+                  element={
+                    <AccountSettings
+                      currentUser={currentUser}
+                      //  uploadedPhoto={uploadedPhoto}
+                      handlePhotoUpload={handlePhotoUpload}
+                      handlePhotoSubmit={handlePhotoSubmit}
+                    />
+                  }
+                />
+                <Route
+                  path="/"
+                  element={
+                    <FriendsList
+                      friends={friends}
+                      transactions={transactions}
+                      currentUser={currentUser}
+                      loading={loading}
+                    />
+                  }
+                />
+              </Routes>
+            </Navbar>
+          </div>
+        </>
+        {/* )} */}
       </ThemeProvider>
       {/* <Footer /> */}
     </>
