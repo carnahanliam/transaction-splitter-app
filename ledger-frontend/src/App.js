@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import { Routes, Route, useNavigate } from 'react-router-dom'
+import {
+  Routes,
+  Route,
+  // useNavigate
+} from 'react-router-dom'
 import userService from './services/users'
-import loginService from './services/login'
-import LoginForm from './components/LoginForm'
+// import loginService from './services/login'
+// import LoginForm from './components/LoginForm'
 import FriendsList from './components/FriendsList'
 import TransactionForm from './components/TransactionForm'
 import SingleFriendView from './components/SingleFriendView'
@@ -15,7 +19,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles'
 import getDesignTokens from './themeMUI'
 
 const App = () => {
-  const navigate = useNavigate()
+  // const navigate = useNavigate()
 
   const loggedInUser = JSON.parse(window.localStorage.getItem('LoggedInUser'))
   const initialUserState = loggedInUser ? loggedInUser : null
@@ -78,24 +82,24 @@ const App = () => {
     }
   }, [currentUser, paletteMode])
 
-  const handleLogin = async (event) => {
-    event.preventDefault()
+  // const handleLogin = async (event) => {
+  //   event.preventDefault()
 
-    const formData = new FormData(event.currentTarget)
-    const username = formData.get('username')
-    const password = formData.get('password')
+  //   const formData = new FormData(event.currentTarget)
+  //   const username = formData.get('username')
+  //   const password = formData.get('password')
 
-    try {
-      const userLogin = await loginService.loginUser({ username, password })
-      const user = await userService.getUser([userLogin.id])
+  //   try {
+  //     const userLogin = await loginService.loginUser({ username, password })
+  //     const user = await userService.getUser([userLogin.id])
 
-      // window.localStorage.setItem('LoggedInUser', JSON.stringify(user))
-      setCurrentUser(user)
-      navigate('/')
-    } catch (err) {
-      throw err
-    }
-  }
+  //     // window.localStorage.setItem('LoggedInUser', JSON.stringify(user))
+  //     setCurrentUser(user)
+  //     navigate('/')
+  //   } catch (err) {
+  //     throw err
+  //   }
+  // }
 
   const handleLogout = (event) => {
     event.preventDefault()
