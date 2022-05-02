@@ -30,7 +30,7 @@ const SingleTransactionView = ({ transactions, currentUser, paletteMode }) => {
   const payerName = whoPaid.id === currentUser.id ? 'You' : whoPaid.name
   const payerAvatar =
     whoPaid.picture !== null
-      ? 'http://localhost:3001/' + whoPaid.picture
+      ? 'https://transaction-splitter-app.herokuapp.com/' + whoPaid.picture
       : defaultAvatar
 
   const amountsOwed = userSplits.map((u) => {
@@ -41,7 +41,7 @@ const SingleTransactionView = ({ transactions, currentUser, paletteMode }) => {
         id: u.user.id,
         picture:
           u.user.picture !== null
-            ? 'http://localhost:3001/' + u.user.picture
+            ? 'https://transaction-splitter-app.herokuapp.com/' + u.user.picture
             : defaultAvatar,
       }
     } else {
@@ -51,7 +51,7 @@ const SingleTransactionView = ({ transactions, currentUser, paletteMode }) => {
         id: u.user.id,
         picture:
           u.user.picture !== null
-            ? 'http://localhost:3001/' + u.user.picture
+            ? 'https://transaction-splitter-app.herokuapp.com/' + u.user.picture
             : defaultAvatar,
       }
     }

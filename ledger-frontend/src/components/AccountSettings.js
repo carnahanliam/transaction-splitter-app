@@ -7,7 +7,7 @@ const AccountSettings = ({
   handlePhotoSubmit,
 }) => {
   const displayAvatar = currentUser.picture
-    ? 'http://localhost:3001/' + currentUser.picture
+    ? 'https://transaction-splitter-app.herokuapp.com/' + currentUser.picture
     : defaultAvatar
 
   if (currentUser === null) {

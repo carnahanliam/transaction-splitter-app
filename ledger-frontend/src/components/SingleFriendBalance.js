@@ -9,7 +9,7 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
 
 const SingleFriendBalance = ({ friend }) => {
   const friendAvatar = friend.picture
-    ? 'http://localhost:3001/' + friend.picture
+    ? 'https://transaction-splitter-app.herokuapp.com/' + friend.picture
     : defaultAvatar
 
   return (

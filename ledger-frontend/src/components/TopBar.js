@@ -24,7 +24,7 @@ const TopBar = ({ handleLogout, currentUser }) => {
   }
 
   const displayAvatar = currentUser.picture
-    ? 'http://localhost:3001/' + currentUser.picture
+    ? 'https://transaction-splitter-app.herokuapp.com/' + currentUser.picture
     : defaultAvatar
 
   return (
