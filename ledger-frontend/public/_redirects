@@ -1,2 +1,2 @@
-/api/_ https://transaction-splitter-app.herokuapp.com/api/:splat 200
-/_ /index.html 200
+/api/* https://transaction-splitter-app.herokuapp.com/api/:splat 200
+/* /index.html 200
