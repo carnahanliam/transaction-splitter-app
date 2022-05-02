@@ -30,4 +30,5 @@ const update = async (userObject) => {
   return response.data
 }
 
+// eslint-disable-next-line import/no-anonymous-default-export
 export default { getAll, getUser, create, update }

@@ -19,6 +19,7 @@ const TransactionForm = ({ friends, currentUser }) => {
 
   useEffect(() => {
     setChecked(initialState)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [friends])
 
   const handleIncludedChange = (f) => {
