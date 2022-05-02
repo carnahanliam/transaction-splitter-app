@@ -23,6 +23,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
+  "proxy": "https://transaction-splitter-app.herokuapp.com",
   "eslintConfig": {
     "extends": [
       "react-app",
