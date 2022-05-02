@@ -1,19 +1,25 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
 import { findBalances } from '../utils/friendsHelper'
 import Loading from './Loading'
 import Box from '@mui/material/Box'
 import Paper from '@mui/material/Paper'
 import Typography from '@mui/material/Typography'
 import Divider from '@mui/material/Divider'
+import SingleFriendBalance from './SingleFriendBalance'
 
 const FriendsList = ({ friends, transactions, currentUser, loading }) => {
   const [activeTab, setActiveTab] = useState('total')
+
+  const handleSwitchTabs = (tab, event) => {
+    event.preventDefault()
+    setActiveTab(tab)
+  }
 
   var friendBalances = []
   friendBalances = friends.map((f) => ({
     name: f.name,
     id: f.id,
+    picture: f.picture,
     currentBalance: 0,
   }))
 
@@ -52,90 +58,51 @@ const FriendsList = ({ friends, transactions, currentUser, loading }) => {
     .filter((b) => Math.sign(b.currentBalance) === 1)
     .reduce((acc, cur) => acc + cur.currentBalance, totalBalance.owed)
 
-  // const TotalBalances = () => (
-  //   <div>
-  //     <p>you owe ${totalBalance.owe * -1}</p>
-  //     <p>you are owed ${totalBalance.owed}</p>
-  //   </div>
-  // )
-
-  const AllFriends = () =>
-    friends.length === 0 ? (
-      <p>no friends yet</p>
-    ) : (
-      <div>
-        {friendBalances.map((f) => (
-          <div key={f.id}>
-            <Link to={`/friends/${f.id}`}>
-              <h2>
-                {f.name}:{' '}
-                {Math.sign(f.currentBalance) === 1
-                  ? `owes you $${f.currentBalance}`
-                  : `you owe $${f.currentBalance * -1}`}
-              </h2>
-            </Link>
-          </div>
-        ))}
-      </div>
-    )
-
-  const FriendsOweYou = () => {
+  const DisplayFriends = () => {
     if (friends.length === 0) {
-      return <p>no friends yet</p>
+      return <p>No friends yet</p>
     }
 
-    const FriendsWhoOwe = friendBalances.filter(
-      (b) => Math.sign(b.currentBalance) === 1
-    )
-    if (FriendsWhoOwe.length === 0) {
-      return <p>None of you friends owe you right now</p>
+    if (activeTab === 'total') {
+      return (
+        <div>
+          {friendBalances.map((f) => (
+            <SingleFriendBalance key={f.id} friend={f} />
+          ))}
+        </div>
+      )
+    } else if (activeTab === 'owed') {
+      const FriendsWhoOwe = friendBalances.filter(
+        (b) => Math.sign(b.currentBalance) === 1
+      )
+      if (FriendsWhoOwe.length === 0) {
+        return <p>None of you friends owe you right now</p>
+      }
+
+      return (
+        <div>
+          {FriendsWhoOwe.map((f) => (
+            <SingleFriendBalance key={f.id} friend={f} />
+          ))}
+        </div>
+      )
+    } else if (activeTab === 'owe') {
+      const FriendsYouOwe = friendBalances.filter(
+        (b) => Math.sign(b.currentBalance) === -1
+      )
+
+      if (FriendsYouOwe.length === 0) {
+        return <p>You don't owe any friends right now</p>
+      }
+
+      return (
+        <div>
+          {FriendsYouOwe.map((f) => (
+            <SingleFriendBalance key={f.id} friend={f} />
+          ))}
+        </div>
+      )
     }
-
-    return (
-      <div>
-        {FriendsWhoOwe.map((f) => (
-          <div key={f.id}>
-            <Link to={`/friends/${f.id}`}>
-              <h2>
-                {f.name}: owes you ${f.currentBalance}
-              </h2>
-            </Link>
-          </div>
-        ))}
-      </div>
-    )
-  }
-
-  const FriendsYouOwe = () => {
-    if (friends.length === 0) {
-      return <p>no friends yet</p>
-    }
-
-    const FriendsWhoOwe = friendBalances.filter(
-      (b) => Math.sign(b.currentBalance) === -1
-    )
-    if (FriendsWhoOwe.length === 0) {
-      return <p>You don't owe any friends right now</p>
-    }
-
-    return (
-      <div>
-        {FriendsWhoOwe.map((f) => (
-          <div key={f.id}>
-            <Link to={`/friends/${f.id}`}>
-              <h2>
-                {f.name}: you owe ${Math.abs(f.currentBalance)}
-              </h2>
-            </Link>
-          </div>
-        ))}
-      </div>
-    )
-  }
-
-  const handleSwitchTabs = (tab, event) => {
-    event.preventDefault()
-    setActiveTab(tab)
   }
 
   return (
@@ -143,142 +110,229 @@ const FriendsList = ({ friends, transactions, currentUser, loading }) => {
       <Paper
         elevation={0}
         sx={{
-          // p: 2,
-          maxWidth: 750,
+          maxWidth: 700,
           display: 'flex',
-          // flexDirection: 'row',
-          alignItems: 'flex-end',
-          justifyContent: 'space-between',
+          flexDirection: 'column',
+          // alignItems: 'center',
+          // justifyContent: 'space-between',
+          // mt: 1.5,
+          mb: 0.5,
         }}
         variant="card"
       >
-        <Paper
-          elevation={activeTab === 'total' ? 3 : 1}
+        <Typography
+          variant="h5"
           sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            px: 2,
-            pt: 2,
-            borderRadius: '10px',
-            overflow: 'hidden',
-            '&:hover': {
-              cursor: 'pointer',
-            },
-            width: 1,
-            my: 2,
+            mt: 2,
             ml: 2,
-            mr: 1,
+            fontSize: 28,
           }}
-          onClick={(event) => handleSwitchTabs('total', event)}
         >
-          <Typography variant="subtitle.1">Total Balance</Typography>
-          <Typography
-            variant="h4"
-            sx={{
-              color:
-                Math.sign(totalBalance.owe + totalBalance.owed) !== -1
-                  ? 'success.main'
-                  : 'error.main',
-            }}
-          >
-            ${Math.abs(totalBalance.owe + totalBalance.owed)}
-          </Typography>
-          <Divider
-            sx={{
-              borderBottomWidth: 4,
-              bgcolor:
-                Math.sign(totalBalance.owe + totalBalance.owed) !== -1
-                  ? 'success.main'
-                  : 'error.main',
-              opacity: activeTab === 'total' ? 1 : 0,
-              mt: 2,
-              mx: -2,
-            }}
-          />
-        </Paper>
-        <Paper
-          elevation={activeTab === 'owed' ? 3 : 1}
+          Your Balances
+        </Typography>
+        <Box
           sx={{
             display: 'flex',
-            flexDirection: 'column',
-            px: 2,
-            pt: 2,
-            borderRadius: '10px',
-            overflow: 'hidden',
-            '&:hover': {
-              cursor: 'pointer',
-            },
-            width: 1,
-            my: 2,
-            ml: 1,
-            mr: 1,
+            alignItems: 'center',
+            justifyContent: 'space-between',
           }}
-          onClick={(event) => handleSwitchTabs('owed', event)}
         >
-          <Typography variant="subtitle.1">You are owed</Typography>
-          <Typography
-            variant="h4"
+          <Paper
+            elevation={activeTab === 'total' ? 3 : 1}
             sx={{
-              color: 'success.main',
+              display: 'flex',
+              flexDirection: 'column',
+              px: 2,
+              pt: 4,
+              borderRadius: '10px',
+              overflow: 'hidden',
+              '&:hover': {
+                cursor: 'pointer',
+                boxShadow:
+                  '0px 3px 3px -2px rgb(0 0 0 / 20%), 0px 3px 4px 0px rgb(0 0 0 / 14%), 0px 1px 8px 0px rgb(0 0 0 / 12%)',
+                backgroundImage:
+                  'linear-gradient(rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.08))',
+              },
+              width: '66%',
+              height: 1,
+              mt: 1,
+              mb: 2,
+              ml: 2,
+              mr: 1,
+            }}
+            onClick={(event) => handleSwitchTabs('total', event)}
+          >
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                mx: 'auto',
+              }}
+            >
+              <Typography variant="h5" sx={{ mb: '-5px' }}>
+                Total Balance
+              </Typography>
+              <Typography
+                variant="h2"
+                sx={{
+                  color:
+                    Math.sign(totalBalance.owe + totalBalance.owed) !== -1
+                      ? 'success.main'
+                      : 'error.main',
+                }}
+              >
+                $
+                {Math.abs(
+                  Math.round((totalBalance.owe + totalBalance.owed) * 100) / 100
+                )}
+              </Typography>
+            </Box>
+            <Divider
+              sx={{
+                borderBottomWidth: 6,
+                bgcolor:
+                  Math.sign(totalBalance.owe + totalBalance.owed) !== -1
+                    ? 'success.main'
+                    : 'error.main',
+                opacity: activeTab === 'total' ? 1 : 0,
+                mt: 3,
+                mx: -2,
+              }}
+            />
+          </Paper>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              width: '34%',
+              mt: 1,
+              mb: 2,
+              ml: 1,
+              mr: 2,
             }}
           >
-            ${Math.abs(totalBalance.owed)}
-          </Typography>
-          <Divider
-            sx={{
-              borderBottomWidth: 4,
-              bgcolor: 'success.main',
-              opacity: activeTab === 'owed' ? 1 : 0,
-              mt: 2,
-              mx: -2,
-            }}
-          />
-        </Paper>
-        <Paper
-          elevation={activeTab === 'owe' ? 3 : 1}
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            px: 2,
-            pt: 2,
-            borderRadius: '10px',
-            overflow: 'hidden',
-            '&:hover': {
-              cursor: 'pointer',
-            },
-            width: 1,
-            my: 2,
-            ml: 1,
-            mr: 2,
-          }}
-          onClick={(event) => handleSwitchTabs('owe', event)}
-        >
-          <Typography variant="subtitle.1">You owe</Typography>
-          <Typography
-            variant="h4"
-            sx={{
-              color: 'error.main',
-            }}
-          >
-            ${Math.abs(totalBalance.owe)}
-          </Typography>
-          <Divider
-            sx={{
-              borderBottomWidth: 4,
-              bgcolor: 'error.main',
-              opacity: activeTab === 'owe' ? 1 : 0,
-              mt: 2,
-              mx: -2,
-            }}
-          />
-        </Paper>
+            <Paper
+              elevation={activeTab === 'owed' ? 3 : 1}
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                px: 2,
+                pt: 1,
+                borderRadius: '10px',
+                overflow: 'hidden',
+                '&:hover': {
+                  cursor: 'pointer',
+                  boxShadow:
+                    '0px 3px 3px -2px rgb(0 0 0 / 20%), 0px 3px 4px 0px rgb(0 0 0 / 14%), 0px 1px 8px 0px rgb(0 0 0 / 12%)',
+                  backgroundImage:
+                    'linear-gradient(rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.08))',
+                },
+                mb: 1,
+              }}
+              onClick={(event) => handleSwitchTabs('owed', event)}
+            >
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  mx: 'auto',
+                }}
+              >
+                <Typography
+                  variant="subtitle2"
+                  sx={{ fontSize: '13px', lineHeight: '18px' }}
+                >
+                  You are owed
+                </Typography>
+                <Typography
+                  variant="h5"
+                  sx={{
+                    color: 'success.main',
+                    fontSize: '26px',
+                  }}
+                >
+                  ${Math.abs(totalBalance.owed)}
+                </Typography>
+              </Box>
+              <Divider
+                sx={{
+                  borderBottomWidth: 4,
+                  bgcolor: 'success.main',
+                  opacity: activeTab === 'owed' ? 1 : 0,
+                  mt: 1,
+                  mx: -2,
+                }}
+              />
+            </Paper>
+            <Paper
+              elevation={activeTab === 'owe' ? 3 : 1}
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                px: 2,
+                pt: 1,
+                borderRadius: '10px',
+                overflow: 'hidden',
+                '&:hover': {
+                  cursor: 'pointer',
+                  boxShadow:
+                    '0px 3px 3px -2px rgb(0 0 0 / 20%), 0px 3px 4px 0px rgb(0 0 0 / 14%), 0px 1px 8px 0px rgb(0 0 0 / 12%)',
+                  backgroundImage:
+                    'linear-gradient(rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.08))',
+                },
+                mt: 1,
+              }}
+              onClick={(event) => handleSwitchTabs('owe', event)}
+            >
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  mx: 'auto',
+                }}
+              >
+                <Typography
+                  variant="subtitle2"
+                  sx={{ fontSize: '13px', lineHeight: '18px' }}
+                >
+                  You owe
+                </Typography>
+                <Typography
+                  variant="h5"
+                  sx={{
+                    color: 'error.main',
+                    fontSize: '26px',
+                  }}
+                >
+                  ${Math.abs(totalBalance.owe)}
+                </Typography>
+              </Box>
+              <Divider
+                sx={{
+                  borderBottomWidth: 4,
+                  bgcolor: 'error.main',
+                  opacity: activeTab === 'owe' ? 1 : 0,
+                  mt: 1,
+                  mx: -2,
+                }}
+              />
+            </Paper>
+          </Box>
+        </Box>
       </Paper>
-
-      <h1>Friends</h1>
-      {/* {loading ? <Loading /> : <AllFriends />} */}
-      {activeTab === 'total' && <AllFriends />}
-      {activeTab === 'owed' && <FriendsOweYou />}
-      {activeTab === 'owe' && <FriendsYouOwe />}
+      <Paper
+        elevation={0}
+        sx={{
+          maxWidth: 700,
+          display: 'flex',
+          flexDirection: 'column',
+          px: 2,
+        }}
+        variant="card"
+      >
+        {/* {loading ? <Loading /> : <AllFriends />} */}
+        <DisplayFriends />
+      </Paper>
     </>
   )
 }

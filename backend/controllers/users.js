@@ -21,10 +21,11 @@ usersRouter.get('/', async (request, response) => {
     .populate('friends', {
       name: 1,
       username: 1,
+      picture: 1,
     })
     .populate({
       path: 'transactions',
-      populate: { path: 'userSplits.user', select: 'name' },
+      populate: { path: 'userSplits.user', select: 'name picture' },
     })
   response.json(users)
 })
@@ -98,7 +99,7 @@ usersRouter.put('/:id', async (request, response) => {
 
   const updatedUser = await User.findByIdAndUpdate(request.params.id, user, {
     new: true,
-  }).populate('friends', { name: 1, username: 1 })
+  }).populate('friends', { name: 1, username: 1, picture: 1 })
 
   await Promise.all(
     friends.map(async (f) => {
@@ -120,7 +121,7 @@ usersRouter.get('/:id', async (request, response) => {
   if (user) {
     populatedUser = await User.findOne({ _id: user._id }).populate({
       path: 'transactions',
-      populate: { path: 'userSplits.user', select: 'name' },
+      populate: { path: 'userSplits.user', select: 'name picture' },
     })
     response.json(populatedUser)
   } else {

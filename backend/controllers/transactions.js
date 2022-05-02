@@ -15,6 +15,7 @@ transactionsRouter.get('/', async (request, response) => {
   const transactions = await Transaction.find({}).populate('userSplits.user', {
     name: 1,
     username: 1,
+    picture: 1,
   })
 
   response.json(transactions)
@@ -52,7 +53,7 @@ transactionsRouter.post('/', async (request, response) => {
 
   const savedPopulatedTransaction = await Transaction.findOne({
     _id: savedTransaction._id,
-  }).populate('userSplits.user', { name: 1 })
+  }).populate('userSplits.user', { name: 1, picture: 1 })
 
   response.json(savedPopulatedTransaction)
 })
@@ -62,7 +63,7 @@ transactionsRouter.get('/:id', async (request, response) => {
   if (transaction) {
     const populatedTransaction = await Transaction.findOne({
       _id: transaction._id,
-    }).populate('userSplits.user', { name: 1 })
+    }).populate('userSplits.user', { name: 1, picture: 1 })
     response.json(populatedTransaction)
   } else {
     response.status(404).end()

@@ -1,7 +1,13 @@
 import React from 'react'
 import { useMatch } from 'react-router-dom'
+import defaultAvatar from '../uploads/default-avatar.png'
+import Box from '@mui/material/Box'
+import Paper from '@mui/material/Paper'
+import Typography from '@mui/material/Typography'
+import Avatar from '@mui/material/Avatar'
+import { Divider } from '@mui/material'
 
-const SingleTransactionView = ({ transactions, currentUser }) => {
+const SingleTransactionView = ({ transactions, currentUser, paletteMode }) => {
   const match = useMatch('/transactions/:id')
   const transaction = match
     ? transactions.find((t) => t.id === match.params.id)
@@ -15,7 +21,6 @@ const SingleTransactionView = ({ transactions, currentUser }) => {
 
   var myDate = new Date(date)
   const options = {
-    weekday: 'long',
     year: 'numeric',
     month: 'long',
     day: 'numeric',
@@ -24,6 +29,10 @@ const SingleTransactionView = ({ transactions, currentUser }) => {
 
   const whoPaid = userSplits.find((u) => u.payer).user
   const payerName = whoPaid.id === currentUser.id ? 'You' : whoPaid.name
+  const payerAvatar =
+    whoPaid.picture !== null
+      ? 'http://localhost:3001/' + whoPaid.picture
+      : defaultAvatar
 
   const amountsOwed = userSplits.map((u) => {
     if (u.user.id === currentUser.id) {
@@ -31,18 +40,206 @@ const SingleTransactionView = ({ transactions, currentUser }) => {
         name: 'You',
         amount: Math.round(total * u.percent * 100) / 100,
         id: u.user.id,
+        picture:
+          u.user.picture !== null
+            ? 'http://localhost:3001/' + u.user.picture
+            : defaultAvatar,
       }
     } else {
       return {
         name: u.user.name,
         amount: Math.round(total * u.percent * 100) / 100,
         id: u.user.id,
+        picture:
+          u.user.picture !== null
+            ? 'http://localhost:3001/' + u.user.picture
+            : defaultAvatar,
       }
     }
   })
 
   return (
     <>
+      <Paper
+        elevation={0}
+        sx={{
+          maxWidth: 700,
+          display: 'flex',
+          flexDirection: 'column',
+        }}
+        variant="card"
+      >
+        <Paper
+          elevation={1}
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            p: 3,
+            borderRadius: '10px',
+            mx: 2,
+            mt: 2,
+            mb: 1,
+          }}
+        >
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+            }}
+          >
+            <Typography variant="h5">{title}</Typography>
+            <Typography variant="subtitle2">{transactionDate}</Typography>
+          </Box>
+          <Typography variant="h4">${total}</Typography>
+        </Paper>
+        <Box
+          sx={{
+            display: 'flex',
+          }}
+        >
+          <Paper
+            elevation={1}
+            sx={{
+              display: 'flex',
+              alignItems: 'flex-start',
+              justifyContent: 'space-between',
+              pt: 3,
+              pb: 5,
+              px: 3,
+              borderRadius: '10px',
+              margin: '8px 8px 16px 16px',
+              width: '60%',
+            }}
+          >
+            <Box
+              sx={{
+                // width: 'fit-content',
+                display: 'flex',
+                flexDirection: 'column',
+              }}
+            >
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'flex-start',
+                  // pt: 3,
+                  // px: 5,
+                  mb: -2,
+                  borderRadius: '10px',
+                  overflow: 'hidden',
+                  width: 'auto',
+                  zIndex: '10',
+                }}
+              >
+                <Avatar
+                  alt={whoPaid.name}
+                  src={payerAvatar}
+                  sx={{
+                    width: 50,
+                    height: 50,
+                    borderRadius: '12px',
+                    border: '1px solid #e2e2e2e8',
+                    mr: 2.5,
+                    bgcolor: '#fff',
+                  }}
+                />
+                <Typography variant="h6">
+                  {payerName} paid ${total}
+                </Typography>
+              </Box>
+              <Box
+                sx={{
+                  'div:last-child > div.wireframe': {
+                    borderRadius: '0 0 0 10px',
+                  },
+                }}
+              >
+                {amountsOwed.map((u) => (
+                  <Box
+                    key={u.id}
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'flex-start',
+                      // py: 3,
+                      // px: 5,
+                      mt: -1,
+                      // mb: 2,
+                      // borderRadius: '10px',
+                      // width: 400,
+                    }}
+                  >
+                    <Box
+                      className="wireframe"
+                      sx={{
+                        // border: '1px solid grey',
+                        border:
+                          paletteMode === 'dark'
+                            ? '1px solid rgb(55 71 86)'
+                            : '1px solid #e0e3e7',
+                        borderWidth: '0 0 1px 1px',
+                        px: 3,
+                        py: 3.5,
+                        ml: 3,
+                      }}
+                    >
+                      {''}
+                    </Box>
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        mb: -7,
+                        alignItems: 'center',
+                      }}
+                    >
+                      <Avatar
+                        alt={u.name}
+                        src={u.picture}
+                        sx={{
+                          width: 35,
+                          height: 35,
+                          borderRadius: '10px',
+                          border: '1px solid #e2e2e2e8',
+                          mr: 1,
+                          bgcolor: '#fff',
+                        }}
+                      />
+                      <Typography
+                        variant="subtitle1"
+                        sx={{ lineHeight: '1.3em' }}
+                      >
+                        {u.name} {u.id === currentUser.id ? 'owe' : 'owes'} $
+                        {u.amount}
+                      </Typography>
+                    </Box>
+                  </Box>
+                ))}
+              </Box>
+            </Box>
+          </Paper>
+          <Paper
+            elevation={1}
+            sx={{
+              display: 'flex',
+              alignItems: 'flex-start',
+              justifyContent: 'space-between',
+              px: 3,
+              pt: 2,
+              pb: 3,
+              borderRadius: '10px',
+              margin: '8px 16px 16px 8px',
+              width: '40%',
+            }}
+          >
+            <Typography variant="h6">Comments</Typography>
+          </Paper>
+        </Box>
+      </Paper>
+    </>
+
+    /* <>
       <h3>{title}</h3>
       <h2>${total}</h2>
       <p>{transactionDate}</p>
@@ -58,7 +255,7 @@ const SingleTransactionView = ({ transactions, currentUser }) => {
         ))}
       </ul>
       <p>comments: {comments}</p>
-    </>
+    </> */
   )
 }
 

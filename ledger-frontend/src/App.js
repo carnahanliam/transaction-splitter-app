@@ -7,7 +7,7 @@ import FriendsList from './components/FriendsList'
 import TransactionForm from './components/TransactionForm'
 import SingleFriendView from './components/SingleFriendView'
 import SingleTransactionView from './components/SingleTransactionView'
-import TransactionsList from './components/TransactionsList'
+import AllTransactionsList from './components/AllTransactionsList'
 import AccountSettings from './components/AccountSettings'
 import Navbar from './components/Navbar'
 // import Footer from './components/Footer'
@@ -15,47 +15,30 @@ import { createTheme, ThemeProvider } from '@mui/material/styles'
 import getDesignTokens from './themeMUI'
 
 const App = () => {
-  const loggedInUser = JSON.parse(window.localStorage.getItem('LoggedInUser'))
-  const initialState = loggedInUser ? loggedInUser : null
   const navigate = useNavigate()
 
-  const [paletteMode, setPaletteMode] = useState('light')
+  const loggedInUser = JSON.parse(window.localStorage.getItem('LoggedInUser'))
+  const initialUserState = loggedInUser ? loggedInUser : null
 
-  const changePalette = () => {
-    setPaletteMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'))
-  }
+  const currentPalette = JSON.parse(window.localStorage.getItem('PaletteMode'))
+  const initialPaletteState = currentPalette ? currentPalette : 'light'
 
-  // const paletteToggle = (
-  //   <Box
-  //     sx={{
-  //       display: 'flex',
-  //       width: '100%',
-  //       alignItems: 'center',
-  //       justifyContent: 'center',
-  //       bgcolor: 'background.default',
-  //       color: 'text.primary',
-  //       borderRadius: 1,
-  //       p: 3,
-  //     }}
-  //   >
-  //     {paletteMode} mode
-  //     <IconButton sx={{ ml: 1 }} onClick={changePalette}>
-  //       {paletteMode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
-  //     </IconButton>
-  //   </Box>
-  // )
-
-  const [currentUser, setCurrentUser] = useState(initialState)
+  const [paletteMode, setPaletteMode] = useState(initialPaletteState)
+  const [currentUser, setCurrentUser] = useState(initialUserState)
   const [friends, setFriends] = useState([])
   const [transactions, setTransactions] = useState([])
   const [loading, setLoading] = useState(false)
   const [uploadedPhoto, setUploadedPhoto] = useState(null)
 
+  const changePalette = () => {
+    setPaletteMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'))
+  }
+
   // check local storage for LoggedInUser on initial render
   useEffect(() => {
     setLoading(true)
-    const loggedInUser = JSON.parse(window.localStorage.getItem('LoggedInUser'))
 
+    const loggedInUser = JSON.parse(window.localStorage.getItem('LoggedInUser'))
     if (loggedInUser) {
       async function fetchUser() {
         const user = await userService.getUser([loggedInUser.id])
@@ -63,10 +46,17 @@ const App = () => {
       }
       fetchUser()
     }
+
+    // const palette = JSON.parse(window.localStorage.getItem('PaletteMode'))
+    // if (palette) {
+    //   setPaletteMode(palette)
+    // }
   }, [])
 
   // on change of currentUser: set LoggedInUser in local storage
   useEffect(() => {
+    window.localStorage.setItem('PaletteMode', JSON.stringify(paletteMode))
+
     window.localStorage.setItem('LoggedInUser', JSON.stringify(currentUser))
     const loggedInUser = JSON.parse(window.localStorage.getItem('LoggedInUser'))
 
@@ -86,7 +76,7 @@ const App = () => {
       }
       fetchUserDetails()
     }
-  }, [currentUser])
+  }, [currentUser, paletteMode])
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -156,7 +146,7 @@ const App = () => {
                   <Route
                     path="/transactions"
                     element={
-                      <TransactionsList
+                      <AllTransactionsList
                         transactions={transactions}
                         currentUser={currentUser}
                       />
@@ -177,6 +167,7 @@ const App = () => {
                       <SingleTransactionView
                         transactions={transactions}
                         currentUser={currentUser}
+                        paletteMode={paletteMode}
                       />
                     }
                   />

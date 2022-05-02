@@ -1,6 +1,12 @@
 import React from 'react'
-import { useMatch, Link } from 'react-router-dom'
+import { useMatch } from 'react-router-dom'
 import { findBalances } from '../utils/friendsHelper'
+import defaultAvatar from '../uploads/default-avatar.png'
+import Box from '@mui/material/Box'
+import Paper from '@mui/material/Paper'
+import Typography from '@mui/material/Typography'
+import Avatar from '@mui/material/Avatar'
+import SingleFriendTransactionsList from './SingleFriendTransactionsList'
 
 const SingleFriendView = ({ friends, transactions, currentUser }) => {
   var friendBalances = []
@@ -72,45 +78,95 @@ const SingleFriendView = ({ friends, transactions, currentUser }) => {
     return t
   })
 
-  const convertDate = (date) => {
-    var newDate = new Date(date)
-    const options = {
-      month: 'short',
-      day: 'numeric',
-    }
-
-    return newDate.toLocaleDateString('en-US', options)
-  }
+  const friendAvatar = friend.picture
+    ? 'http://localhost:3001/' + friend.picture
+    : defaultAvatar
 
   return (
     <>
-      <h2>{friend.name}</h2>
-      {/* <h3>Times you borrowed:</h3> */}
-      <div>
-        {friendOrUserPaid
-          .sort((a, b) => {
-            const aDate = new Date(a.date)
-            const bDate = new Date(b.date)
-            return bDate - aDate
-          })
-          .map((t) => (
-            <div key={t.id}>
-              {convertDate(t.date)}
-              {'. '}
-              <b>{t.title}</b>
-              {'. '}
-              <Link to={`/transactions/${t.id}`}>
-                {t.balance === 1 ? 'You lent $' : 'You borrowed $'}
-                {Math.round(
-                  t.total *
-                    t.userSplits.find((u) => u.user.id === currentUser.id)
-                      .percent *
-                    100
-                ) / 100}
-              </Link>
-            </div>
-          ))}
-      </div>
+      <Paper
+        elevation={0}
+        sx={{
+          maxWidth: 700,
+          display: 'flex',
+          flexDirection: 'column',
+          mb: 0.5,
+          overflow: 'hidden',
+        }}
+        variant="card"
+      >
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            py: 3,
+            px: 5,
+            // mb: 2,
+            borderRadius: '10px',
+            overflow: 'hidden',
+            width: 'auto',
+          }}
+        >
+          <Avatar
+            alt={friend.name}
+            src={friendAvatar}
+            sx={{
+              width: 50,
+              height: 50,
+              borderRadius: '12px',
+              border: '1px solid #e2e2e2e8',
+              mr: 3,
+              bgcolor: '#fff',
+            }}
+          />
+          <Typography variant="h5">{friend.name}</Typography>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              ml: 'auto',
+            }}
+          >
+            {Math.sign(friend.currentBalance) === 1 ? (
+              <Box sx={{ color: 'success.main' }}>
+                <Typography
+                  variant="subtitle1"
+                  align="right"
+                  sx={{ mb: '-3px' }}
+                >
+                  owes you
+                </Typography>
+                <Typography variant="h5">${friend.currentBalance}</Typography>
+                <Typography
+                  variant="subtitle1"
+                  align="right"
+                  sx={{ mt: '-5px' }}
+                >
+                  in total
+                </Typography>
+              </Box>
+            ) : (
+              <Box sx={{ color: 'error.main' }}>
+                <Typography
+                  variant="subtitle1"
+                  align="right"
+                  sx={{ mb: '-3px' }}
+                >
+                  you owe
+                </Typography>
+                <Typography variant="h5">
+                  ${friend.currentBalance * -1}
+                </Typography>
+              </Box>
+            )}
+          </Box>
+        </Box>
+        <SingleFriendTransactionsList
+          transactions={friendOrUserPaid}
+          currentUser={currentUser}
+          friend={friend}
+        />
+      </Paper>
     </>
   )
 }

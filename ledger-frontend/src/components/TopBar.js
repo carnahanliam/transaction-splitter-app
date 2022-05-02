@@ -30,8 +30,13 @@ const TopBar = ({ handleLogout, currentUser }) => {
     : defaultAvatar
 
   return (
-    <Container position="static" maxWidth="xl" disableGutters>
-      <Toolbar disableGutters>
+    <Container
+      position="static"
+      disableGutters
+      maxWidth="md"
+      sx={{ marginLeft: 0 }}
+    >
+      <Toolbar sx={{ maxWidth: 650 }} disableGutters>
         <Container
           sx={{
             flexGrow: 1,
@@ -72,17 +77,18 @@ const TopBar = ({ handleLogout, currentUser }) => {
                 alt={currentUser.name}
                 src={displayAvatar}
                 sx={{
-                  width: 50,
-                  height: 50,
-                  borderRadius: '15px',
+                  width: 45,
+                  height: 45,
+                  borderRadius: '12px',
                   border: '1px solid #e2e2e2e8',
+                  bgcolor: '#fff',
                 }}
-                // variant="rounded"
               />
             </IconButton>
           </Tooltip>
           <Menu
             sx={{ mt: '45px' }}
+            MenuListProps={{ disablePadding: true }}
             id="menu-appbar"
             anchorEl={anchorElUser}
             anchorOrigin={{
@@ -100,10 +106,14 @@ const TopBar = ({ handleLogout, currentUser }) => {
             <MenuItem onClick={handleCloseUserMenu}>
               <Button
                 component={Link}
+                // variant="string"
                 sx={{
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
+                  '&:hover': {
+                    bgcolor: 'transparent',
+                  },
                 }}
                 to={'/account/settings'}
               >
@@ -116,6 +126,9 @@ const TopBar = ({ handleLogout, currentUser }) => {
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
+                  '&:hover': {
+                    bgcolor: 'transparent',
+                  },
                 }}
                 onClick={handleLogout}
               >

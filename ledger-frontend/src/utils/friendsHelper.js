@@ -14,6 +14,7 @@ export const findBalances = (transaction, currentUser) => {
       {
         id: whoPaid.user.id,
         name: whoPaid.user.name,
+        picture: whoPaid.user.picture,
         currentBalance: -1 * amountOwed,
       },
     ]
@@ -24,6 +25,7 @@ export const findBalances = (transaction, currentUser) => {
       .map((u) => ({
         id: u.user.id,
         name: u.user.name,
+        picture: u.user.picture,
         currentBalance: Math.round(cost * u.percent * 100) / 100,
       }))
     return balance
