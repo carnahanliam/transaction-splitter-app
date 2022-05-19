@@ -21,7 +21,7 @@ const App = () => {
   const initialUserState = loggedInUser ? loggedInUser : null
 
   const currentPalette = JSON.parse(window.localStorage.getItem('PaletteMode'))
-  const initialPaletteState = currentPalette ? currentPalette : 'light'
+  const initialPaletteState = currentPalette ? currentPalette : 'dark'
 
   const [paletteMode, setPaletteMode] = useState(initialPaletteState)
   const [currentUser, setCurrentUser] = useState(initialUserState)
