@@ -60,14 +60,19 @@ const SingleFriendBalance = ({ friend }) => {
             <Typography variant="subtitle1" align="right" sx={{ mb: '-3px' }}>
               owes you
             </Typography>
-            <Typography variant="h5">${friend.currentBalance}</Typography>
+            {/* <Typography variant="h5">${friend.currentBalance}</Typography> */}
+            <Typography variant="h5">
+              ${Math.abs(Math.round(friend.currentBalance * 100) / 100)}
+            </Typography>
           </Box>
         ) : (
           <Box sx={{ color: 'error.light' }}>
             <Typography variant="subtitle1" align="right" sx={{ mb: '-3px' }}>
               you owe
             </Typography>
-            <Typography variant="h5">${friend.currentBalance * -1}</Typography>
+            <Typography variant="h5">
+              ${Math.abs(Math.round(friend.currentBalance * 100) / 100)}
+            </Typography>
           </Box>
         )}
       </Box>

@@ -12,6 +12,7 @@
     "dev": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "proxy": "https://transaction-splitter-app.herokuapp.com",
   "author": "Liam Carnahan",
   "license": "ISC",
   "dependencies": {

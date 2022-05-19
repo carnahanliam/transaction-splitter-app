@@ -136,7 +136,9 @@ const SingleFriendView = ({ friends, transactions, currentUser }) => {
                 >
                   owes you
                 </Typography>
-                <Typography variant="h5">${friend.currentBalance}</Typography>
+                <Typography variant="h5">
+                  ${Math.abs(Math.round(friend.currentBalance * 100) / 100)}
+                </Typography>
                 <Typography
                   variant="subtitle1"
                   align="right"
@@ -155,7 +157,14 @@ const SingleFriendView = ({ friends, transactions, currentUser }) => {
                   you owe
                 </Typography>
                 <Typography variant="h5">
-                  ${friend.currentBalance * -1}
+                  ${Math.abs(Math.round(friend.currentBalance * 100) / 100)}
+                </Typography>
+                <Typography
+                  variant="subtitle1"
+                  align="right"
+                  sx={{ mt: '-5px' }}
+                >
+                  in total
                 </Typography>
               </Box>
             )}

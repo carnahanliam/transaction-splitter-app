@@ -1,15 +1,12 @@
-PUT http://localhost:3001/api/users/6245de9ba8836361b3113848
+PUT https://transaction-splitter-app.herokuapp.com/api/users/62857e5e007a23817dc9ff3c
 Content-Type: application/json
 
 {
-  "name": "Joe Blow",
-  "username": "joeblow",
+  "name": "Patrick",
+  "username": "pinhead5",
   "friends": [
     {
-      "userId": "6245d7e6a8836361b3113783"
-    },
-    {
-      "userId": "6245d7d2a8836361b311377f"
+      "userId": "62857dd0007a23817dc9ff34"
     }
   ]
 }

@@ -54,7 +54,7 @@ const TransactionForm = ({ friends, currentUser }) => {
       comments: comments,
       userSplits: split.map((u) => ({
         userId: u.id,
-        percent: Math.round(100 / split.length) / 100,
+        percent: Math.round(100000 / split.length) / 100000,
         payer: u.id === payer.id,
       })),
     }

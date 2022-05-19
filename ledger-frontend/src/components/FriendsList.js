@@ -250,7 +250,7 @@ const FriendsList = ({ friends, transactions, currentUser, loading }) => {
                     fontSize: '26px',
                   }}
                 >
-                  ${Math.abs(totalBalance.owed)}
+                  ${Math.abs(Math.round(totalBalance.owed * 100) / 100)}
                 </Typography>
               </Box>
               <Divider
@@ -303,7 +303,7 @@ const FriendsList = ({ friends, transactions, currentUser, loading }) => {
                     fontSize: '26px',
                   }}
                 >
-                  ${Math.abs(totalBalance.owe)}
+                  ${Math.abs(Math.round(totalBalance.owe * 100) / 100)}
                 </Typography>
               </Box>
               <Divider
