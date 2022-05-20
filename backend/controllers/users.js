@@ -108,7 +108,7 @@ usersRouter.post(
   }
 )
 
-app.get('/images/:key', (request, response) => {
+app.get('/uploads/:key', (request, response) => {
   const key = request.params.key
   const readStream = getFileStream(key)
 

@@ -35,7 +35,7 @@ const TopBar = ({ handleLogout, currentUser }) => {
       sx={{ marginLeft: 0 }}
     >
       <img
-        src="/images/1653075893704-529451969-235-2359380_pinhead-patrick-patrick-star-transparent-hd-png-download.png"
+        src="/uploads/1653075893704-529451969-235-2359380_pinhead-patrick-patrick-star-transparent-hd-png-download.png"
         alt="test"
       />
       <Toolbar sx={{ maxWidth: 650 }} disableGutters>
