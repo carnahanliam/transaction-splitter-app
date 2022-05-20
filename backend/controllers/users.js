@@ -92,7 +92,7 @@ usersRouter.post(
     console.log('userToUpdate.picture: ', userToUpdate.picture)
 
     const updatedUser = {
-      picture: newAvatar ? newAvatar : userToUpdate.picture,
+      picture: newAvatar ? newAvatar.path : userToUpdate.picture,
     }
 
     const savedUpdatedUser = await User.findByIdAndUpdate(id, updatedUser, {
