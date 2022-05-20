@@ -101,8 +101,8 @@ usersRouter.post(
 
     const result = await uploadFile(newAvatar)
 
-    // response.json(savedUpdatedUser)
-    response.send({ imagePath: `/images/${result.Key}` })
+    response.json(savedUpdatedUser)
+    // response.send({ imagePath: `/images/${result.Key}` })
 
     //fs.unlink(userToUpdate.picture) //remove old avatar from /uploads folder
   }
