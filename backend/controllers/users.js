@@ -5,34 +5,35 @@ const multer = require('multer')
 const multerS3 = require('multer-s3')
 const aws = require('aws-sdk')
 const fs = require('fs').promises
+const uploadFile = require('../utils/S3')
 
-const s3 = new aws.S3()
+// const s3 = new aws.S3()
 
-const upload = multer({
-  storage: multerS3({
-    s3: s3,
-    bucket: 'transaction-splitting-app-image-uploads',
-    metadata: (request, file, next) => {
-      next(null, { fieldName: file.fieldname })
-    },
-    key: (request, file, next) => {
-      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9)
-      next(null, uniqueSuffix + '-' + file.originalname)
-    },
-  }),
-})
-
-// const storage = multer.diskStorage({
-//   destination: (request, file, next) => {
-//     next(null, 'uploads')
-//   },
-//   filename: (request, file, next) => {
-//     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9)
-//     next(null, uniqueSuffix + '-' + file.originalname)
-//   },
+// const upload = multer({
+//   storage: multerS3({
+//     s3: s3,
+//     bucket: 'transaction-splitting-app-image-uploads',
+//     metadata: (request, file, next) => {
+//       next(null, { fieldName: file.fieldname })
+//     },
+//     key: (request, file, next) => {
+//       const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9)
+//       next(null, uniqueSuffix + '-' + file.originalname)
+//     },
+//   }),
 // })
 
-// const upload = multer({ storage: storage })
+const storage = multer.diskStorage({
+  destination: (request, file, next) => {
+    next(null, 'uploads')
+  },
+  filename: (request, file, next) => {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9)
+    next(null, uniqueSuffix + '-' + file.originalname)
+  },
+})
+
+const upload = multer({ storage: storage })
 
 usersRouter.get('/', async (request, response) => {
   const users = await User.find({})
@@ -83,7 +84,8 @@ usersRouter.post(
   upload.single('avatar'),
   async (request, response, next) => {
     const id = request.body.currentUserId
-    const newAvatar = request.file.path
+    const newAvatar = request.file
+    // const newAvatar = request.file.path
     const userToUpdate = await User.findOne({ _id: id })
 
     console.log('newAvatar: ', newAvatar)
@@ -96,6 +98,9 @@ usersRouter.post(
     const savedUpdatedUser = await User.findByIdAndUpdate(id, updatedUser, {
       new: true,
     })
+
+    const result = await uploadFile(newAvatar)
+    console.log(result)
 
     response.json(savedUpdatedUser)
 
