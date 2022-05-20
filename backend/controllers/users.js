@@ -2,19 +2,37 @@ const bcrypt = require('bcrypt')
 const usersRouter = require('express').Router()
 const User = require('../models/user')
 const multer = require('multer')
+const multerS3 = require('multer-s3')
+const aws = require('aws-sdk')
 const fs = require('fs').promises
 
-const storage = multer.diskStorage({
-  destination: (request, file, next) => {
-    next(null, 'uploads')
-  },
-  filename: (request, file, next) => {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9)
-    next(null, uniqueSuffix + '-' + file.originalname)
-  },
+const s3 = new aws.S3()
+
+const upload = multer({
+  storage: multerS3({
+    s3: s3,
+    bucket: 'transaction-splitting-app-image-uploads',
+    metadata: (request, file, next) => {
+      next(null, { fieldName: file.fieldname })
+    },
+    key: (request, file, next) => {
+      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9)
+      next(null, uniqueSuffix + '-' + file.originalname)
+    },
+  }),
 })
 
-const upload = multer({ storage: storage })
+// const storage = multer.diskStorage({
+//   destination: (request, file, next) => {
+//     next(null, 'uploads')
+//   },
+//   filename: (request, file, next) => {
+//     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9)
+//     next(null, uniqueSuffix + '-' + file.originalname)
+//   },
+// })
+
+// const upload = multer({ storage: storage })
 
 usersRouter.get('/', async (request, response) => {
   const users = await User.find({})
