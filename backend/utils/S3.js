@@ -1,6 +1,6 @@
 const S3 = require('aws-sdk/clients/s3')
 require('dotenv').config()
-const fs = require('fs').promises
+const fs = require('fs')
 
 const bucketName = process.env.S3_BUCKET_NAME
 const accessKeyId = process.env.AWS_ACCESS_KEY_ID
