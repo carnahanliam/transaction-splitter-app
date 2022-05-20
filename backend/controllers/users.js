@@ -5,7 +5,7 @@ const multer = require('multer')
 const multerS3 = require('multer-s3')
 const aws = require('aws-sdk')
 const fs = require('fs').promises
-const uploadFile = require('../utils/S3')
+const { uploadFile, getFileStream } = require('../utils/S3')
 
 // const s3 = new aws.S3()
 
@@ -92,7 +92,7 @@ usersRouter.post(
     console.log('userToUpdate.picture: ', userToUpdate.picture)
 
     const updatedUser = {
-      picture: newAvatar ? newAvatar.path : userToUpdate.picture,
+      picture: newAvatar ? newAvatar.filename : userToUpdate.picture,
     }
 
     const savedUpdatedUser = await User.findByIdAndUpdate(id, updatedUser, {
@@ -100,13 +100,20 @@ usersRouter.post(
     })
 
     const result = await uploadFile(newAvatar)
-    console.log(result)
 
-    response.json(savedUpdatedUser)
+    // response.json(savedUpdatedUser)
+    response.send({ imagePath: `/images/${result.Key}` })
 
-    fs.unlink(userToUpdate.picture) //remove old avatar from /uploads folder
+    //fs.unlink(userToUpdate.picture) //remove old avatar from /uploads folder
   }
 )
+
+app.get('/images/:key', (request, response) => {
+  const key = request.params.key
+  const readStream = getFileStream(key)
+
+  readStream.pipe(response)
+})
 
 usersRouter.put('/:id', async (request, response) => {
   const body = request.body
