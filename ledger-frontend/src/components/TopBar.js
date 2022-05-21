@@ -34,10 +34,6 @@ const TopBar = ({ handleLogout, currentUser }) => {
       maxWidth="md"
       sx={{ marginLeft: 0 }}
     >
-      <img
-        src="/uploads/1653074868457-591148444-SpongeBob_SquarePants_png.png"
-        alt="test"
-      />
       <Toolbar sx={{ maxWidth: 650 }} disableGutters>
         <Container
           sx={{
