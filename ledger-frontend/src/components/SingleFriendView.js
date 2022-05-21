@@ -78,9 +78,7 @@ const SingleFriendView = ({ friends, transactions, currentUser }) => {
     return t
   })
 
-  const friendAvatar = friend.picture
-    ? 'https://transaction-splitter-app.herokuapp.com/' + friend.picture
-    : defaultAvatar
+  const friendAvatar = friend.picture ? '/' + friend.picture : defaultAvatar
 
   return (
     <>
