@@ -79,6 +79,13 @@ usersRouter.post('/', async (request, response) => {
   response.json(savedUser)
 })
 
+usersRouter.get('/uploads/:key', (request, response) => {
+  const key = request.params.key
+  const readStream = getFileStream(key)
+
+  readStream.pipe(response)
+})
+
 usersRouter.post(
   '/update-profile/',
   upload.single('avatar'),
@@ -86,7 +93,7 @@ usersRouter.post(
     const id = request.body.currentUserId
     const file = request.file
     const result = await uploadFile(file)
-    const newAvatar = 'uploads/' + result.Key
+    const newAvatar = 'api/users/uploads/' + result.Key
 
     const userToUpdate = await User.findOne({ _id: id })
 
@@ -106,13 +113,6 @@ usersRouter.post(
     //fs.unlink(userToUpdate.picture) //remove old avatar from /uploads folder
   }
 )
-
-usersRouter.get('/uploads/:key', (request, response) => {
-  const key = request.params.key
-  const readStream = getFileStream(key)
-
-  readStream.pipe(response)
-})
 
 usersRouter.put('/:id', async (request, response) => {
   const body = request.body
