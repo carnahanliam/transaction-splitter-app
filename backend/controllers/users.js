@@ -88,8 +88,7 @@ usersRouter.post(
     const newAvatar = request.file.path
     const userToUpdate = await User.findOne({ _id: id })
 
-    console.log('newAvatar: ', newAvatar)
-    console.log('userToUpdate.picture: ', userToUpdate.picture)
+    console.log('REQUEST.FILE:', request.file)
 
     const updatedUser = {
       picture: newAvatar ? newAvatar : userToUpdate.picture,
