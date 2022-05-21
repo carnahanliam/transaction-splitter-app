@@ -85,7 +85,9 @@ usersRouter.post(
   async (request, response, next) => {
     const id = request.body.currentUserId
     // const newAvatar = request.file
-    const newAvatar = request.file.path
+    const result = await uploadFile(newAvatar)
+    const newAvatar = 'uploads/' + result.Key
+
     const userToUpdate = await User.findOne({ _id: id })
 
     console.log('REQUEST.FILE:', request.file)
@@ -97,8 +99,6 @@ usersRouter.post(
     const savedUpdatedUser = await User.findByIdAndUpdate(id, updatedUser, {
       new: true,
     })
-
-    const result = await uploadFile(newAvatar)
 
     response.json(savedUpdatedUser)
     // response.send({ imagePath: `/images/${result.Key}` })
