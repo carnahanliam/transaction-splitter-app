@@ -84,8 +84,8 @@ usersRouter.post(
   upload.single('avatar'),
   async (request, response, next) => {
     const id = request.body.currentUserId
-    // const newAvatar = request.file
-    const result = await uploadFile(newAvatar)
+    const file = request.file
+    const result = await uploadFile(file)
     const newAvatar = 'uploads/' + result.Key
 
     const userToUpdate = await User.findOne({ _id: id })
