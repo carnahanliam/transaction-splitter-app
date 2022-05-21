@@ -84,15 +84,15 @@ usersRouter.post(
   upload.single('avatar'),
   async (request, response, next) => {
     const id = request.body.currentUserId
-    const newAvatar = request.file
-    // const newAvatar = request.file.path
+    // const newAvatar = request.file
+    const newAvatar = request.file.path
     const userToUpdate = await User.findOne({ _id: id })
 
     console.log('newAvatar: ', newAvatar)
     console.log('userToUpdate.picture: ', userToUpdate.picture)
 
     const updatedUser = {
-      picture: newAvatar ? newAvatar.filename : userToUpdate.picture,
+      picture: newAvatar ? newAvatar : userToUpdate.picture,
     }
 
     const savedUpdatedUser = await User.findByIdAndUpdate(id, updatedUser, {

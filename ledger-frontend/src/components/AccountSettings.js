@@ -7,7 +7,7 @@ const AccountSettings = ({
   handlePhotoSubmit,
 }) => {
   const displayAvatar = currentUser.picture
-    ? 'https://transaction-splitter-app.herokuapp.com/' + currentUser.picture
+    ? currentUser.picture
     : defaultAvatar
 
   if (currentUser === null) {
@@ -33,6 +33,7 @@ const AccountSettings = ({
         <button type="submit">Update</button>
       </form>
       New pic:
+      {/* <img src={defaultAvatar} alt="user avatar" style={avatarStyle} /> */}
       <img src={displayAvatar} alt="user avatar" style={avatarStyle} />
     </div>
   )
