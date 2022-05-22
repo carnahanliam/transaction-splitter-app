@@ -87,7 +87,7 @@ usersRouter.post(
       new: true,
     })
 
-    fs.unlink(file) //remove old avatar from /uploads
+    // fs.unlink(file) //remove old avatar from /uploads
 
     response.json(savedUpdatedUser)
   }
