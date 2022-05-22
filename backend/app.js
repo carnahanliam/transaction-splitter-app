@@ -25,7 +25,6 @@ app.use(cors())
 app.use(express.json())
 app.use(middleware.requestLogger)
 
-// app.use('/uploads', express.static('uploads'))
 app.use('/api/users', usersRouter)
 app.use('/api/transactions', transactionsRouter)
 app.use('/api/login', loginRouter)
