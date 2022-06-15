@@ -10,7 +10,6 @@ import SingleTransactionView from './components/SingleTransactionView'
 import AllTransactionsList from './components/AllTransactionsList'
 import AccountSettings from './components/AccountSettings'
 import Navbar from './components/Navbar'
-// import Footer from './components/Footer'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 import getDesignTokens from './themeMUI'
 
@@ -46,11 +45,6 @@ const App = () => {
       }
       fetchUser()
     }
-
-    // const palette = JSON.parse(window.localStorage.getItem('PaletteMode'))
-    // if (palette) {
-    //   setPaletteMode(palette)
-    // }
   }, [])
 
   // on change of currentUser: set LoggedInUser in local storage
@@ -89,7 +83,6 @@ const App = () => {
       const userLogin = await loginService.loginUser({ username, password })
       const user = await userService.getUser([userLogin.id])
 
-      // window.localStorage.setItem('LoggedInUser', JSON.stringify(user))
       setCurrentUser(user)
       navigate('/')
     } catch (err) {
@@ -100,7 +93,6 @@ const App = () => {
   const handleLogout = (event) => {
     event.preventDefault()
 
-    // window.localStorage.removeItem('LoggedInUser')
     setCurrentUser(null)
     setFriends([])
     setTransactions([])
@@ -139,9 +131,6 @@ const App = () => {
                 paletteMode={paletteMode}
                 changePalette={changePalette}
               >
-                {/* <Navbar currentUser={currentUser} handleLogout={handleLogout} /> */}
-                {/* <h2>{currentUser.name} logged in</h2> */}
-                {/* <h1>Ledger App</h1> */}
                 <Routes>
                   <Route
                     path="/transactions"
@@ -186,7 +175,6 @@ const App = () => {
                     element={
                       <AccountSettings
                         currentUser={currentUser}
-                        //  uploadedPhoto={uploadedPhoto}
                         handlePhotoUpload={handlePhotoUpload}
                         handlePhotoSubmit={handlePhotoSubmit}
                       />
@@ -209,7 +197,6 @@ const App = () => {
           </>
         )}
       </ThemeProvider>
-      {/* <Footer /> */}
     </>
   )
 }
