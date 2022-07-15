@@ -5,6 +5,7 @@ import Box from '@mui/material/Box'
 import Paper from '@mui/material/Paper'
 import Typography from '@mui/material/Typography'
 import Avatar from '@mui/material/Avatar'
+import { dollarFormatter } from '../utils/helperFunctions'
 
 const SingleTransactionView = ({ transactions, currentUser, paletteMode }) => {
   const match = useMatch('/transactions/:id')
@@ -90,7 +91,7 @@ const SingleTransactionView = ({ transactions, currentUser, paletteMode }) => {
             <Typography variant="h5">{title}</Typography>
             <Typography variant="subtitle2">{transactionDate}</Typography>
           </Box>
-          <Typography variant="h4">${total}</Typography>
+          <Typography variant="h4">{dollarFormatter(total)}</Typography>
         </Paper>
         <Box
           sx={{
@@ -113,7 +114,6 @@ const SingleTransactionView = ({ transactions, currentUser, paletteMode }) => {
           >
             <Box
               sx={{
-                // width: 'fit-content',
                 display: 'flex',
                 flexDirection: 'column',
               }}
@@ -123,8 +123,6 @@ const SingleTransactionView = ({ transactions, currentUser, paletteMode }) => {
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'flex-start',
-                  // pt: 3,
-                  // px: 5,
                   mb: -2,
                   borderRadius: '10px',
                   overflow: 'hidden',
@@ -145,7 +143,7 @@ const SingleTransactionView = ({ transactions, currentUser, paletteMode }) => {
                   }}
                 />
                 <Typography variant="h6">
-                  {payerName} paid ${total}
+                  {payerName} paid {dollarFormatter(total)}
                 </Typography>
               </Box>
               <Box
@@ -162,18 +160,12 @@ const SingleTransactionView = ({ transactions, currentUser, paletteMode }) => {
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'flex-start',
-                      // py: 3,
-                      // px: 5,
                       mt: -1,
-                      // mb: 2,
-                      // borderRadius: '10px',
-                      // width: 400,
                     }}
                   >
                     <Box
                       className="wireframe"
                       sx={{
-                        // border: '1px solid grey',
                         border:
                           paletteMode === 'dark'
                             ? '1px solid rgb(55 71 86)'
@@ -209,8 +201,8 @@ const SingleTransactionView = ({ transactions, currentUser, paletteMode }) => {
                         variant="subtitle1"
                         sx={{ lineHeight: '1.3em' }}
                       >
-                        {u.name} {u.id === currentUser.id ? 'owe' : 'owes'} $
-                        {u.amount}
+                        {u.name} {u.id === currentUser.id ? 'owe ' : 'owes '}
+                        {dollarFormatter(u.amount)}
                       </Typography>
                     </Box>
                   </Box>
@@ -232,30 +224,11 @@ const SingleTransactionView = ({ transactions, currentUser, paletteMode }) => {
               width: '40%',
             }}
           >
-            {/* <Typography variant="h6">Comments </Typography> */}
             <Typography variant="subtitle2">{comments}</Typography>
           </Paper>
         </Box>
       </Paper>
     </>
-
-    /* <>
-      <h3>{title}</h3>
-      <h2>${total}</h2>
-      <p>{transactionDate}</p>
-      <br />
-      <b>
-        {payerName} paid ${total}
-      </b>
-      <ul>
-        {amountsOwed.map((u) => (
-          <li key={u.id}>
-            {u.name} {u.id === currentUser.id ? 'owe' : 'owes'} ${u.amount}
-          </li>
-        ))}
-      </ul>
-      <p>comments: {comments}</p>
-    </> */
   )
 }
 

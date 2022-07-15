@@ -6,6 +6,7 @@ import Paper from '@mui/material/Paper'
 import Typography from '@mui/material/Typography'
 import Avatar from '@mui/material/Avatar'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
+import { dollarFormatter } from '../utils/helperFunctions'
 
 const SingleFriendBalance = ({ friend }) => {
   const friendAvatar = friend.picture
@@ -60,9 +61,10 @@ const SingleFriendBalance = ({ friend }) => {
             <Typography variant="subtitle1" align="right" sx={{ mb: '-3px' }}>
               owes you
             </Typography>
-            {/* <Typography variant="h5">${friend.currentBalance}</Typography> */}
             <Typography variant="h5">
-              ${Math.abs(Math.round(friend.currentBalance * 100) / 100)}
+              {dollarFormatter(
+                Math.abs(Math.round(friend.currentBalance * 100) / 100)
+              )}
             </Typography>
           </Box>
         ) : (
@@ -71,7 +73,9 @@ const SingleFriendBalance = ({ friend }) => {
               you owe
             </Typography>
             <Typography variant="h5">
-              ${Math.abs(Math.round(friend.currentBalance * 100) / 100)}
+              {dollarFormatter(
+                Math.abs(Math.round(friend.currentBalance * 100) / 100)
+              )}
             </Typography>
           </Box>
         )}

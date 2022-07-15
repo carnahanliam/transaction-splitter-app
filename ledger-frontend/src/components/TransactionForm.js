@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import TransactionService from '../services/transactions'
 import TransDetailsForm from './TransDetailsForm'
 import Box from '@mui/material/Box'
 import Paper from '@mui/material/Paper'
@@ -12,9 +11,15 @@ import Button from '@mui/material/Button'
 
 const steps = ['Add an expense', 'Choose how to split the cost']
 
-const TransactionForm = ({ friends, currentUser }) => {
+const TransactionForm = ({ friends, currentUser, createTransaction }) => {
+  const curUserForSelect = (({ id, name, picture, username }) => ({
+    id,
+    name,
+    picture,
+    username,
+  }))(currentUser)
   const [includedFriends, setIncludedFriends] = useState([])
-  const [payer, setPayer] = useState(currentUser)
+  const [payer, setPayer] = useState(curUserForSelect)
   const [amount, setAmount] = useState('')
   const [title, setTitle] = useState('')
   const [comments, setComments] = useState('')
@@ -64,26 +69,27 @@ const TransactionForm = ({ friends, currentUser }) => {
   const handleNewTransaction = async (event) => {
     event.preventDefault()
 
-    setActiveStep(activeStep + 1)
-
     const split = includedFriends.concat(currentUser)
 
-    const transaction = {
-      title: title,
-      total: Number(amount),
-      comments: comments,
-      userSplits: split.map((u) => ({
-        userId: u.id,
-        percent: Math.round(100000 / split.length) / 100000,
-        payer: u.id === payer.id,
-      })),
+    try {
+      await createTransaction({
+        title: title,
+        total: Number(amount),
+        comments: comments,
+        userSplits: split.map((u) => ({
+          userId: u.id,
+          percent: Math.round(100000 / split.length) / 100000,
+          payer: u.id === payer.id,
+        })),
+      })
+
+      setActiveStep(activeStep + 1)
+      setAmount('')
+      setComments('')
+      setTitle('')
+    } catch (error) {
+      console.log(error)
     }
-
-    await TransactionService.create(transaction)
-
-    setAmount('')
-    setComments('')
-    setTitle('')
   }
 
   const getStepContent = (step) => {
@@ -111,13 +117,11 @@ const TransactionForm = ({ friends, currentUser }) => {
             title={title}
             comments={comments}
             includedFriends={includedFriends}
-            currentUser={currentUser}
+            currentUser={curUserForSelect}
             payer={payer}
             handlePayerChange={handlePayerChange}
           />
         )
-      // case 2:
-      //   return <Review />
       default:
         throw new Error('Unknown step')
     }
@@ -158,9 +162,6 @@ const TransactionForm = ({ friends, currentUser }) => {
             <>
               <Typography variant="h5" gutterBottom align={'center'}>
                 Expense added.
-              </Typography>
-              <Typography variant="subtitle1" align={'center'} sx={{ pb: 3 }}>
-                TODO: add confirmation details.
               </Typography>
             </>
           ) : (

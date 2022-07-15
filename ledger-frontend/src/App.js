@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Routes, Route, useNavigate } from 'react-router-dom'
 import userService from './services/users'
 import loginService from './services/login'
+import transactionService from './services/transactions'
 import LoginForm from './components/LoginForm'
 import FriendsList from './components/FriendsList'
 import TransactionForm from './components/TransactionForm'
@@ -13,64 +14,36 @@ import Navbar from './components/Navbar'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 import getDesignTokens from './themeMUI'
 
+import axios from 'axios'
+
+// if backend responds with jwt expired error the user is removed from local storage and page reload will redirect to login page
+axios.interceptors.response.use(
+  (response) => {
+    return response
+  },
+  (error) => {
+    if (error.response.data.message === 'jwt expired') {
+      window.localStorage.removeItem('LoggedInUser')
+      window.location.reload()
+    } else {
+      console.log(error.response.data.message)
+    }
+  }
+)
+
 const App = () => {
-  const navigate = useNavigate()
-
-  const loggedInUser = JSON.parse(window.localStorage.getItem('LoggedInUser'))
-  const initialUserState = loggedInUser ? loggedInUser : null
-
-  const currentPalette = JSON.parse(window.localStorage.getItem('PaletteMode'))
-  const initialPaletteState = currentPalette ? currentPalette : 'dark'
-
-  const [paletteMode, setPaletteMode] = useState(initialPaletteState)
-  const [currentUser, setCurrentUser] = useState(initialUserState)
+  const [paletteMode, setPaletteMode] = useState('dark')
+  const [currentUser, setCurrentUser] = useState(null)
   const [friends, setFriends] = useState([])
   const [transactions, setTransactions] = useState([])
   const [loading, setLoading] = useState(false)
   const [uploadedPhoto, setUploadedPhoto] = useState(null)
 
+  const navigate = useNavigate()
+
   const changePalette = () => {
     setPaletteMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'))
   }
-
-  // check local storage for LoggedInUser on initial render
-  useEffect(() => {
-    setLoading(true)
-
-    const loggedInUser = JSON.parse(window.localStorage.getItem('LoggedInUser'))
-    if (loggedInUser) {
-      async function fetchUser() {
-        const user = await userService.getUser([loggedInUser.id])
-        setCurrentUser(user)
-      }
-      fetchUser()
-    }
-  }, [])
-
-  // on change of currentUser: set LoggedInUser in local storage
-  useEffect(() => {
-    window.localStorage.setItem('PaletteMode', JSON.stringify(paletteMode))
-
-    window.localStorage.setItem('LoggedInUser', JSON.stringify(currentUser))
-    const loggedInUser = JSON.parse(window.localStorage.getItem('LoggedInUser'))
-
-    if (loggedInUser) {
-      async function fetchUserDetails() {
-        setLoading(true)
-
-        const friends = await userService.getUser(currentUser.friends)
-        if (friends.constructor === Object) {
-          const friend = [friends]
-          setFriends(friend)
-        } else {
-          setFriends(friends)
-        }
-        setTransactions(currentUser.transactions)
-        setLoading(false)
-      }
-      fetchUserDetails()
-    }
-  }, [currentUser, paletteMode])
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -80,18 +53,27 @@ const App = () => {
     const password = formData.get('password')
 
     try {
-      const userLogin = await loginService.loginUser({ username, password })
-      const user = await userService.getUser([userLogin.id])
+      const { user, token } = await loginService.loginUser({
+        username,
+        password,
+      })
 
+      window.localStorage.setItem(
+        'LoggedInUser',
+        JSON.stringify({ ...user, token })
+      )
+      transactionService.setToken(token)
       setCurrentUser(user)
       navigate('/')
-    } catch (err) {
-      throw err
+    } catch (error) {
+      throw error
     }
   }
 
   const handleLogout = (event) => {
     event.preventDefault()
+
+    window.localStorage.removeItem('LoggedInUser')
 
     setCurrentUser(null)
     setFriends([])
@@ -112,6 +94,55 @@ const App = () => {
     setCurrentUser(updatedUser)
     setUploadedPhoto(null)
   }
+
+  const addTransaction = async (transactionObj) => {
+    const newTransaction = await transactionService.create(transactionObj)
+    const updatedUser = {
+      ...currentUser,
+      transactions: [...currentUser.transactions, newTransaction],
+    }
+    setCurrentUser(updatedUser)
+  }
+
+  // LIFECYCLE
+
+  useEffect(() => {
+    setLoading(true)
+    const loggedInUser = JSON.parse(window.localStorage.getItem('LoggedInUser'))
+    if (loggedInUser) {
+      setCurrentUser(loggedInUser)
+      transactionService.setToken(loggedInUser.token)
+    } else {
+      // if token has expired set user to null which will force logout
+      setCurrentUser(null)
+      setFriends([])
+      setTransactions([])
+    }
+
+    const userPalette = JSON.parse(window.localStorage.getItem('PaletteMode'))
+    if (userPalette) {
+      setPaletteMode(userPalette)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (currentUser) {
+      setLoading(true)
+      const friends = currentUser.friends
+      if (friends.constructor === Object) {
+        const friend = [friends]
+        setFriends(friend)
+      } else {
+        setFriends(friends)
+      }
+      setTransactions(currentUser.transactions)
+      setLoading(false)
+    }
+  }, [currentUser, transactions])
+
+  useEffect(() => {
+    window.localStorage.setItem('PaletteMode', JSON.stringify(paletteMode))
+  }, [paletteMode])
 
   return (
     <>
@@ -147,6 +178,7 @@ const App = () => {
                       <TransactionForm
                         friends={friends}
                         currentUser={currentUser}
+                        createTransaction={addTransaction}
                       />
                     }
                   />

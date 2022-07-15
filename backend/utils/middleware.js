@@ -1,4 +1,7 @@
 const logger = require('./logger')
+const jwt = require('jsonwebtoken')
+const createError = require('http-errors')
+const { getTokenFrom } = require('./authHelper')
 
 const requestLogger = (request, response, next) => {
   logger.info('Method:', request.method)
@@ -14,17 +17,10 @@ const unknownEndpoint = (request, response) => {
 
 const errorHandler = (error, request, response, next) => {
   logger.error(error.message)
-
-  if (error.name === 'CastError') {
-    return response.status(400).send({ error: 'malformatted id' })
-  } else if (error.name === 'ValidationError') {
-    return response.status(400).send({ error: error.message })
-  } else if (error.name === 'JsonWebTokenError') {
-    return response.status(400).send({ error: 'Invalid token' })
-  } else if (error.name === 'TokenExpiredError') {
-    response.status(400).send({ error: 'token has expired' })
-  }
-  next(error)
+  const statusCode = response.statusCode !== 200 ? response.statusCode : 500
+  response.status(statusCode).json({
+    message: error.message,
+  })
 }
 
 module.exports = {

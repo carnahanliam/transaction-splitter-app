@@ -7,6 +7,7 @@ import Paper from '@mui/material/Paper'
 import Typography from '@mui/material/Typography'
 import Avatar from '@mui/material/Avatar'
 import SingleFriendTransactionsList from './SingleFriendTransactionsList'
+import { dollarFormatter } from '../utils/helperFunctions'
 
 const SingleFriendView = ({ friends, transactions, currentUser }) => {
   var friendBalances = []
@@ -99,7 +100,6 @@ const SingleFriendView = ({ friends, transactions, currentUser }) => {
             alignItems: 'center',
             py: 3,
             px: 5,
-            // mb: 2,
             borderRadius: '10px',
             overflow: 'hidden',
             width: 'auto',
@@ -135,7 +135,9 @@ const SingleFriendView = ({ friends, transactions, currentUser }) => {
                   owes you
                 </Typography>
                 <Typography variant="h5">
-                  ${Math.abs(Math.round(friend.currentBalance * 100) / 100)}
+                  {dollarFormatter(
+                    Math.abs(Math.round(friend.currentBalance * 100) / 100)
+                  )}
                 </Typography>
                 <Typography
                   variant="subtitle1"
@@ -155,7 +157,9 @@ const SingleFriendView = ({ friends, transactions, currentUser }) => {
                   you owe
                 </Typography>
                 <Typography variant="h5">
-                  ${Math.abs(Math.round(friend.currentBalance * 100) / 100)}
+                  {dollarFormatter(
+                    Math.abs(Math.round(friend.currentBalance * 100) / 100)
+                  )}
                 </Typography>
                 <Typography
                   variant="subtitle1"

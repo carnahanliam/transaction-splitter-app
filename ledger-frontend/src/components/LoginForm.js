@@ -7,16 +7,11 @@ import TextField from '@mui/material/TextField'
 import Box from '@mui/material/Box'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import Typography from '@mui/material/Typography'
-// import Container from '@mui/material/Container'
 import Paper from '@mui/material/Paper'
 import Grid from '@mui/material/Grid'
-// import loginImage from '../uploads/finance-app-purple.svg'
-// import creditCardImg from '../uploads/Saly-credit-card.svg'
 import creditCardImg from '../uploads/Saly-credit-card-cropped.png'
-// import rocketImg from '../uploads/Saly-rocket-cropped.png'
 import usingPhoneImg from '../uploads/Saly-using-phone-cropped.png'
 import blobShadowImg from '../uploads/blob.png'
-// import coinImg from '../uploads/Coin_perspective_matte.png'
 import './LoginForm.css'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 
@@ -57,7 +52,6 @@ const LoginForm = ({ handleLogin }) => {
           flexWrap: 'nowrap',
           justifyContent: 'center',
           minWidth: 900,
-          // overflow: 'hidden',
         }}
       >
         <CssBaseline />
@@ -83,19 +77,6 @@ const LoginForm = ({ handleLogin }) => {
               maxWidth: 760,
             }}
           >
-            {/* <Box
-              component="img"
-              src={coinImg}
-              alt="coin"
-              sx={{
-                width: 55,
-                ml: 4,
-                position: 'absolute',
-                top: '15vh',
-                left: '5vw',
-                zIndex: 7,
-              }}
-            /> */}
             <Box
               className="hover"
               component="img"
@@ -319,7 +300,6 @@ const LoginForm = ({ handleLogin }) => {
             </Box>
           </Grid>
         </Grid>
-        {/* <Footer xs={12} md={5} bgcolor="transparent" /> */}
       </Grid>
     </ThemeProvider>
   )

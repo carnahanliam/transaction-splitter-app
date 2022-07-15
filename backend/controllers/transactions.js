@@ -2,77 +2,114 @@ const transactionsRouter = require('express').Router()
 const jwt = require('jsonwebtoken')
 const Transaction = require('../models/transaction')
 const User = require('../models/user')
-
-const getTokenFrom = (request) => {
-  const authorization = request.get('authorization')
-  if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
-    return authorization.substring(7)
-  }
-  return null
-}
+const { getTokenFrom } = require('../utils/authHelper')
 
 transactionsRouter.get('/', async (request, response) => {
-  const transactions = await Transaction.find({}).populate('userSplits.user', {
-    name: 1,
-    username: 1,
-    picture: 1,
-  })
+  try {
+    const transactions = await Transaction.find({}).populate(
+      'userSplits.user',
+      {
+        name: 1,
+        username: 1,
+        picture: 1,
+      }
+    )
 
-  response.json(transactions)
+    response.json(transactions)
+  } catch (error) {
+    next(error)
+  }
 })
 
-transactionsRouter.post('/', async (request, response) => {
-  const body = request.body
+// only logged-in users can post new transactions
+transactionsRouter.post('/', async (request, response, next) => {
+  try {
+    const body = request.body
+    const token = getTokenFrom(request)
+    if (!token) {
+      return next()
+    }
 
-  const users = body.userSplits.map((u) => {
-    u.user = u.userId
-    delete u['userId']
-    return u
-  })
-
-  const transaction = new Transaction({
-    title: body.title,
-    total: body.total,
-    comments: body.comments,
-    userSplits: users,
-  })
-
-  const savedTransaction = await transaction.save()
-
-  await Promise.all(
-    body.userSplits.map(async (u) => {
-      try {
-        const user = await User.findById(u.user)
-        user.transactions = user.transactions.concat(savedTransaction._id)
-        await user.save()
-      } catch (err) {
-        throw err
+    const decodedToken = jwt.verify(
+      token,
+      process.env.SECRET,
+      (error, decoded) => {
+        if (error) {
+          return next(error)
+        }
+        return decoded.id
       }
+    )
+
+    if (!decodedToken) {
+      return next()
+    }
+
+    const user = await User.findById(decodedToken)
+    if (!user) {
+      throw new Error('There is no user associated with the provided token')
+    }
+
+    const users = body.userSplits.map((u) => {
+      u.user = u.userId
+      delete u['userId']
+      return u
     })
-  )
 
-  const savedPopulatedTransaction = await Transaction.findOne({
-    _id: savedTransaction._id,
-  }).populate('userSplits.user', { name: 1, picture: 1 })
+    const transaction = new Transaction({
+      title: body.title,
+      total: body.total,
+      comments: body.comments,
+      userSplits: users,
+    })
 
-  response.json(savedPopulatedTransaction)
+    const savedTransaction = await transaction.save()
+
+    await Promise.all(
+      body.userSplits.map(async (u) => {
+        try {
+          const user = await User.findById(u.user)
+          user.transactions = user.transactions.concat(savedTransaction._id)
+          await user.save()
+        } catch (error) {
+          next(error)
+        }
+      })
+    )
+
+    const savedPopulatedTransaction = await Transaction.findOne({
+      _id: savedTransaction._id,
+    }).populate('userSplits.user', { name: 1, picture: 1 })
+
+    response.json(savedPopulatedTransaction)
+  } catch (error) {
+    next(error)
+  }
 })
 
 transactionsRouter.get('/:id', async (request, response) => {
-  const transaction = await Transaction.findById(request.params.id)
-  if (transaction) {
-    const populatedTransaction = await Transaction.findOne({
-      _id: transaction._id,
-    }).populate('userSplits.user', { name: 1, picture: 1 })
-    response.json(populatedTransaction)
-  } else {
-    response.status(404).end()
+  try {
+    const transaction = await Transaction.findById(request.params.id)
+    if (transaction) {
+      const populatedTransaction = await Transaction.findOne({
+        _id: transaction._id,
+      }).populate('userSplits.user', { name: 1, picture: 1 })
+      response.json(populatedTransaction)
+    } else {
+      response.status(404).end()
+    }
+  } catch (error) {
+    next(error)
   }
 })
 
 transactionsRouter.delete('/', async (request, response) => {
-  await Transaction.deleteMany({})
-  return response.status(204).end()
+  try {
+    await Transaction.deleteMany({})
+    return response.status(204).end()
+  } catch (error) {
+    next(error)
+  }
 })
 
 module.exports = transactionsRouter

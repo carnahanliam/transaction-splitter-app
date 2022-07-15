@@ -5,6 +5,7 @@ import Paper from '@mui/material/Paper'
 import Typography from '@mui/material/Typography'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
 import Divider from '@mui/material/Divider'
+import { dollarFormatter } from '../utils/helperFunctions'
 
 const AllTransctionsList = ({ transactions, currentUser }) => {
   const convertDate = (date) => {
@@ -62,16 +63,12 @@ const AllTransctionsList = ({ transactions, currentUser }) => {
                   elevation={0}
                   square
                   sx={{
-                    // borderRadius: 0,
                     textDecoration: 'none',
                     display: 'flex',
                     py: 1.5,
                     px: 2,
-                    // overflow: 'hidden',
                     backgroundColor: 'transparent',
                     alignItems: 'center',
-                    // backgroundImage:
-                    //   'linear-gradient(rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.05))',
                     '&:hover': {
                       cursor: 'pointer',
                       boxShadow:
@@ -80,8 +77,6 @@ const AllTransctionsList = ({ transactions, currentUser }) => {
                         'linear-gradient(rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.08))',
                     },
                     width: 'auto',
-                    // mx: 2,
-                    // mb: '6px',
                   }}
                 >
                   <Box
@@ -180,7 +175,7 @@ const AllTransctionsList = ({ transactions, currentUser }) => {
                             mr: 2,
                           }}
                         >
-                          ${t.total}
+                          {dollarFormatter(t.total)}
                         </Typography>
                         <Typography
                           variant="subtitle1"
@@ -193,16 +188,17 @@ const AllTransctionsList = ({ transactions, currentUser }) => {
                             textAlign: 'start',
                           }}
                         >
-                          $
-                          {t.total -
-                            Math.round(
-                              t.total *
-                                t.userSplits.find(
-                                  (u) => u.user.id === currentUser.id
-                                ).percent *
+                          {dollarFormatter(
+                            t.total -
+                              Math.round(
+                                t.total *
+                                  t.userSplits.find(
+                                    (u) => u.user.id === currentUser.id
+                                  ).percent *
+                                  100
+                              ) /
                                 100
-                            ) /
-                              100}
+                          )}
                         </Typography>
                       </Box>
                     </Box>
@@ -261,7 +257,7 @@ const AllTransctionsList = ({ transactions, currentUser }) => {
                             mr: 2,
                           }}
                         >
-                          ${t.total}
+                          {dollarFormatter(t.total)}
                         </Typography>
                         <Typography
                           variant="subtitle1"
@@ -274,14 +270,15 @@ const AllTransctionsList = ({ transactions, currentUser }) => {
                             textAlign: 'start',
                           }}
                         >
-                          $
-                          {Math.round(
-                            t.total *
-                              t.userSplits.find(
-                                (u) => u.user.id === currentUser.id
-                              ).percent *
-                              100
-                          ) / 100}
+                          {dollarFormatter(
+                            Math.round(
+                              t.total *
+                                t.userSplits.find(
+                                  (u) => u.user.id === currentUser.id
+                                ).percent *
+                                100
+                            ) / 100
+                          )}
                         </Typography>
                       </Box>
                     </Box>

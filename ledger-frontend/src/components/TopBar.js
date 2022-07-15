@@ -48,7 +48,6 @@ const TopBar = ({ handleLogout, currentUser }) => {
             noWrap
             component="div"
             sx={{
-              // flexGrow: 1,
               display: { xs: 'flex' },
               color: 'text.primary',
             }}
@@ -60,7 +59,6 @@ const TopBar = ({ handleLogout, currentUser }) => {
             noWrap
             component="div"
             sx={{
-              // flexGrow: 1,
               display: { xs: 'flex' },
               color: 'text.secondary',
             }}
@@ -104,7 +102,6 @@ const TopBar = ({ handleLogout, currentUser }) => {
             <MenuItem onClick={handleCloseUserMenu}>
               <Button
                 component={Link}
-                // variant="string"
                 sx={{
                   display: 'flex',
                   alignItems: 'center',

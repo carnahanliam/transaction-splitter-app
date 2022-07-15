@@ -38,23 +38,8 @@ const getDesignTokens = (mode) => ({
             borderRadius: '20px',
             border: '1px solid #d8d8d821',
             boxShadow: '0px 3px 12px rgb(0 0 0 / 5%)',
-            // marginBottom: '10px',
           },
         },
-        // {
-        //   props: { variant: 'innerCard' },
-        //   style: {
-        //     display: 'flex',
-        //     flexDirection: 'column',
-        //     padding: '16px 16px 0 16px',
-        //     borderRadius: '10px',
-        //     overflow: 'hidden',
-        // '&:hover': {
-        //   cursor: 'pointer',
-        // },
-        //     width: '100%',
-        //   },
-        // },
       ],
     },
     MuiModal: {

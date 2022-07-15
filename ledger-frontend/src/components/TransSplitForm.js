@@ -5,6 +5,7 @@ import Chip from '@mui/material/Chip'
 import FormControl from '@mui/material/FormControl'
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong'
 import { MenuItem, Select } from '@mui/material'
+import { dollarFormatter } from '../utils/helperFunctions'
 
 const TransSplitForm = ({
   amount,
@@ -163,8 +164,7 @@ const TransSplitForm = ({
             </Select>
           </FormControl>
           <br />
-          (everyone pays ${splitAmount}
-          ).
+          (everyone pays {dollarFormatter(splitAmount)}).
           {/* add conditional rendering for message that changes based on split equality and who the user owes / who owes the user */}
         </Typography>
       </Box>

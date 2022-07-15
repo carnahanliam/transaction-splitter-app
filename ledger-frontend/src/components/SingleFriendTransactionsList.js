@@ -5,6 +5,7 @@ import Paper from '@mui/material/Paper'
 import Typography from '@mui/material/Typography'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
 import Divider from '@mui/material/Divider'
+import { dollarFormatter } from '../utils/helperFunctions'
 
 const SingleFriendTransactionsList = ({
   transactions,
@@ -46,7 +47,6 @@ const SingleFriendTransactionsList = ({
                 elevation={0}
                 square
                 sx={{
-                  // borderRadius: 0,
                   textDecoration: 'none',
                   display: 'flex',
                   alignItems: 'center',
@@ -54,8 +54,6 @@ const SingleFriendTransactionsList = ({
                   px: 2,
                   overflow: 'hidden',
                   backgroundColor: 'transparent',
-                  // backgroundImage:
-                  //   'linear-gradient(rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.05))',
                   '&:hover': {
                     cursor: 'pointer',
                     boxShadow:
@@ -64,8 +62,6 @@ const SingleFriendTransactionsList = ({
                       'linear-gradient(rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.08))',
                   },
                   width: 'auto',
-                  // mx: 2,
-                  // mb: '6px',
                 }}
               >
                 <Box
@@ -133,7 +129,7 @@ const SingleFriendTransactionsList = ({
                           fontSize: '18px',
                         }}
                       >
-                        ${t.total}
+                        {dollarFormatter(t.total)}
                       </Typography>
                     </Box>
                     <Box
@@ -161,13 +157,14 @@ const SingleFriendTransactionsList = ({
                           color: 'success.light',
                         }}
                       >
-                        $
-                        {Math.round(
-                          t.total *
-                            t.userSplits.find((u) => u.user.id === friend.id)
-                              .percent *
-                            100
-                        ) / 100}
+                        {dollarFormatter(
+                          Math.round(
+                            t.total *
+                              t.userSplits.find((u) => u.user.id === friend.id)
+                                .percent *
+                              100
+                          ) / 100
+                        )}
                       </Typography>
                     </Box>
                   </>
@@ -199,7 +196,7 @@ const SingleFriendTransactionsList = ({
                           fontSize: '18px',
                         }}
                       >
-                        ${t.total}
+                        {dollarFormatter(t.total)}
                       </Typography>
                     </Box>
                     <Box
@@ -227,14 +224,14 @@ const SingleFriendTransactionsList = ({
                           color: 'error.light',
                         }}
                       >
-                        $
-                        {Math.round(
-                          t.total *
-                            t.userSplits.find(
-                              (u) => u.user.id === currentUser.id
-                            ).percent *
-                            100
-                        ) / 100}
+                        {dollarFormatter(
+                          Math.round(
+                            t.total *
+                              t.userSplits.find((u) => u.user.id === friend.id)
+                                .percent *
+                              100
+                          ) / 100
+                        )}
                       </Typography>
                     </Box>
                   </>
@@ -245,34 +242,6 @@ const SingleFriendTransactionsList = ({
           )
         })}
     </Box>
-
-    /* <>
-      <div>
-        {transactions.map((t) => {
-          const borrowed = t.userSplits.filter(
-            (u) => u.user.id === currentUser.id && u.payer
-          )
-
-          return (
-            <div key={t.id}>
-              {convertDate(t.date)}
-              {'. '}
-              <b>{t.title}</b>
-              {'. '}
-              <Link to={`/transactions/${t.id}`}>
-                {borrowed.length > 0 ? 'You lent $' : 'You borrowed $'}
-                {Math.round(
-                  t.total *
-                    t.userSplits.find((u) => u.user.id === currentUser.id)
-                      .percent *
-                    100
-                ) / 100}
-              </Link>
-            </div>
-          )
-        })}
-      </div>
-    </> */
   )
 }
 

@@ -5,8 +5,9 @@ import Paper from '@mui/material/Paper'
 import Typography from '@mui/material/Typography'
 import Divider from '@mui/material/Divider'
 import SingleFriendBalance from './SingleFriendBalance'
+import { dollarFormatter } from '../utils/helperFunctions'
 
-const FriendsList = ({ friends, transactions, currentUser, loading }) => {
+const FriendsList = ({ friends, transactions, currentUser }) => {
   const [activeTab, setActiveTab] = useState('total')
 
   const handleSwitchTabs = (tab, event) => {
@@ -112,9 +113,6 @@ const FriendsList = ({ friends, transactions, currentUser, loading }) => {
           maxWidth: 700,
           display: 'flex',
           flexDirection: 'column',
-          // alignItems: 'center',
-          // justifyContent: 'space-between',
-          // mt: 1.5,
           mb: 0.5,
         }}
         variant="card"
@@ -180,9 +178,11 @@ const FriendsList = ({ friends, transactions, currentUser, loading }) => {
                       : 'error.main',
                 }}
               >
-                $
-                {Math.abs(
-                  Math.round((totalBalance.owe + totalBalance.owed) * 100) / 100
+                {dollarFormatter(
+                  Math.abs(
+                    Math.round((totalBalance.owe + totalBalance.owed) * 100) /
+                      100
+                  )
                 )}
               </Typography>
             </Box>
@@ -250,7 +250,9 @@ const FriendsList = ({ friends, transactions, currentUser, loading }) => {
                     fontSize: '26px',
                   }}
                 >
-                  ${Math.abs(Math.round(totalBalance.owed * 100) / 100)}
+                  {dollarFormatter(
+                    Math.abs(Math.round(totalBalance.owed * 100) / 100)
+                  )}
                 </Typography>
               </Box>
               <Divider
@@ -303,7 +305,9 @@ const FriendsList = ({ friends, transactions, currentUser, loading }) => {
                     fontSize: '26px',
                   }}
                 >
-                  ${Math.abs(Math.round(totalBalance.owe * 100) / 100)}
+                  {dollarFormatter(
+                    Math.abs(Math.round(totalBalance.owe * 100) / 100)
+                  )}
                 </Typography>
               </Box>
               <Divider
@@ -329,7 +333,6 @@ const FriendsList = ({ friends, transactions, currentUser, loading }) => {
         }}
         variant="card"
       >
-        {/* {loading ? <Loading /> : <AllFriends />} */}
         <DisplayFriends />
       </Paper>
     </>

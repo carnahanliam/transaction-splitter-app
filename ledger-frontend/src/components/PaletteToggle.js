@@ -17,7 +17,6 @@ const PaletteToggle = ({ paletteMode, changePalette }) => {
         borderRadius: 1,
         p: 3,
         mt: '100%',
-        // flexGrow: 1,
       }}
     >
       <IconButton
