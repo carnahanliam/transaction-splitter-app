@@ -1,6 +1,5 @@
 import React from 'react'
 import { useMatch } from 'react-router-dom'
-import { findBalances } from '../../utils/friendsHelper'
 import { dollarFormatter } from '../../utils/helperFunctions'
 import defaultAvatar from '../../uploads/default-avatar.png'
 import { SingleFriendTransactions } from './SingleFriendTransactions'
@@ -9,41 +8,7 @@ import Paper from '@mui/material/Paper'
 import Typography from '@mui/material/Typography'
 import Avatar from '@mui/material/Avatar'
 
-const SingleFriendView = ({ friends, transactions, currentUser }) => {
-  var friendBalances = []
-  friendBalances = friends.map((f) => ({
-    name: f.name,
-    id: f.id,
-    currentBalance: 0,
-  }))
-
-  if (transactions.length !== 0 && friendBalances.length !== 0) {
-    const findBals = transactions.map((t) => {
-      const tmp = findBalances(t, currentUser)
-      return tmp
-    })
-    const mergeBals = Array.prototype.concat.apply([], findBals)
-    const mergeUserBals = mergeBals.reduce((acc, cur) => {
-      const duplicate = acc.find((u) => u.id === cur.id)
-      if (duplicate) {
-        duplicate.currentBalance += cur.currentBalance
-      } else {
-        acc.push(cur)
-      }
-
-      return acc
-    }, [])
-    const mergeBalsIds = mergeUserBals.map((u) => u.id)
-    const updatedFriendBalances = friendBalances.map((user) =>
-      mergeBalsIds.includes(user.id)
-        ? mergeUserBals.find((obj) => {
-            return obj.id === user.id
-          })
-        : user
-    )
-    friendBalances = updatedFriendBalances
-  }
-
+const SingleFriendView = ({ friendBalances, transactions, currentUser }) => {
   const match = useMatch('/friends/:id')
   const friend = match
     ? friendBalances.find((f) => f.id === match.params.id)

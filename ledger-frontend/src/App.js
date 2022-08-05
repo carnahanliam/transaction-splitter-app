@@ -3,6 +3,7 @@ import { Routes, Route, useNavigate } from 'react-router-dom'
 import userService from './services/users'
 import loginService from './services/login'
 import transactionService from './services/transactions'
+import { getFriendBalances } from './utils/balancesHelper'
 import { LoginForm } from './components/LoginForm'
 import { FriendsList } from './components/FriendsList'
 import { TransactionForm } from './components/TransactionForm'
@@ -36,8 +37,8 @@ const App = () => {
   const [currentUser, setCurrentUser] = useState(null)
   const [friends, setFriends] = useState([])
   const [transactions, setTransactions] = useState([])
-  const [loading, setLoading] = useState(false)
   const [uploadedPhoto, setUploadedPhoto] = useState(null)
+  const [friendBalances, setFriendBalances] = useState([])
 
   const navigate = useNavigate()
 
@@ -107,7 +108,6 @@ const App = () => {
   // LIFECYCLE
 
   useEffect(() => {
-    setLoading(true)
     const loggedInUser = JSON.parse(window.localStorage.getItem('LoggedInUser'))
     if (loggedInUser) {
       setCurrentUser(loggedInUser)
@@ -127,7 +127,6 @@ const App = () => {
 
   useEffect(() => {
     if (currentUser) {
-      setLoading(true)
       const friends = currentUser.friends
       if (friends.constructor === Object) {
         const friend = [friends]
@@ -136,7 +135,9 @@ const App = () => {
         setFriends(friends)
       }
       setTransactions(currentUser.transactions)
-      setLoading(false)
+      setFriendBalances(
+        getFriendBalances(currentUser.transactions, currentUser, friends)
+      )
     }
   }, [currentUser, transactions])
 
@@ -199,6 +200,7 @@ const App = () => {
                         friends={friends}
                         transactions={transactions}
                         currentUser={currentUser}
+                        friendBalances={friendBalances}
                       />
                     }
                   />
@@ -217,9 +219,7 @@ const App = () => {
                     element={
                       <FriendsList
                         friends={friends}
-                        transactions={transactions}
-                        currentUser={currentUser}
-                        loading={loading}
+                        friendBalances={friendBalances}
                       />
                     }
                   />

@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { findBalances } from '../../utils/friendsHelper'
 import { dollarFormatter } from '../../utils/helperFunctions'
 import { SingleFriendBalance } from './SingleFriendBalance'
 import Box from '@mui/material/Box'
@@ -7,47 +6,12 @@ import Paper from '@mui/material/Paper'
 import Typography from '@mui/material/Typography'
 import Divider from '@mui/material/Divider'
 
-const FriendsList = ({ friends, transactions, currentUser }) => {
+const FriendsList = ({ friends, friendBalances }) => {
   const [activeTab, setActiveTab] = useState('total')
 
   const handleSwitchTabs = (tab, event) => {
     event.preventDefault()
     setActiveTab(tab)
-  }
-
-  var friendBalances = []
-  friendBalances = friends.map((f) => ({
-    name: f.name,
-    id: f.id,
-    picture: f.picture,
-    currentBalance: 0,
-  }))
-
-  if (transactions.length !== 0 && friendBalances.length !== 0) {
-    const findBals = transactions.map((t) => {
-      const tmp = findBalances(t, currentUser)
-      return tmp
-    })
-    const mergeBals = Array.prototype.concat.apply([], findBals)
-    const mergeUserBals = mergeBals.reduce((acc, cur) => {
-      const duplicate = acc.find((u) => u.id === cur.id)
-      if (duplicate) {
-        duplicate.currentBalance += cur.currentBalance
-      } else {
-        acc.push(cur)
-      }
-
-      return acc
-    }, [])
-    const mergeBalsIds = mergeUserBals.map((u) => u.id)
-    const updatedFriendBalances = friendBalances.map((user) =>
-      mergeBalsIds.includes(user.id)
-        ? mergeUserBals.find((obj) => {
-            return obj.id === user.id
-          })
-        : user
-    )
-    friendBalances = updatedFriendBalances
   }
 
   const totalBalance = { owe: 0, owed: 0 }
