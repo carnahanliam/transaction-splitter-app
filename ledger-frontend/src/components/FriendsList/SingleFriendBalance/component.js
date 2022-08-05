@@ -1,12 +1,12 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import defaultAvatar from '../uploads/default-avatar.png'
+import defaultAvatar from '../../../uploads/default-avatar.png'
+import { dollarFormatter } from '../../../utils/helperFunctions'
 import Box from '@mui/material/Box'
 import Paper from '@mui/material/Paper'
 import Typography from '@mui/material/Typography'
 import Avatar from '@mui/material/Avatar'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
-import { dollarFormatter } from '../utils/helperFunctions'
 
 const SingleFriendBalance = ({ friend }) => {
   const friendAvatar = friend.picture

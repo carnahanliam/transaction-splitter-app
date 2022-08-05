@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import logo from '../uploads/logo_transparent.png'
+import logo from '../../uploads/logo_transparent.png'
+import { Topbar } from './Topbar'
+import { PaletteToggle } from './PaletteToggle'
 import AppBar from '@mui/material/AppBar'
 import Box from '@mui/material/Box'
 import CssBaseline from '@mui/material/CssBaseline'
@@ -12,8 +14,6 @@ import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemText from '@mui/material/ListItemText'
 import MenuIcon from '@mui/icons-material/Menu'
 import Toolbar from '@mui/material/Toolbar'
-import TopBar from './TopBar'
-import PaletteToggle from './PaletteToggle'
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance'
 import CompareArrowsIcon from '@mui/icons-material/CompareArrows'
 import AddIcon from '@mui/icons-material/Add'
@@ -39,7 +39,7 @@ const pages = [
   },
 ]
 
-const NavBar = (props) => {
+const Nav = (props) => {
   const { currentUser, handleLogout } = props
   const [mobileOpen, setMobileOpen] = useState(false)
 
@@ -152,7 +152,7 @@ const NavBar = (props) => {
           >
             <MenuIcon />
           </IconButton>
-          <TopBar currentUser={currentUser} handleLogout={handleLogout} />
+          <Topbar currentUser={currentUser} handleLogout={handleLogout} />
         </Toolbar>
         {/* <Divider sx={{ mt: 1, mx: 2 }} /> */}
       </AppBar>
@@ -218,4 +218,4 @@ const NavBar = (props) => {
   )
 }
 
-export default NavBar
+export default Nav

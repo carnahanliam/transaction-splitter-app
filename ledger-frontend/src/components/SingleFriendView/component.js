@@ -1,13 +1,13 @@
 import React from 'react'
 import { useMatch } from 'react-router-dom'
-import { findBalances } from '../utils/friendsHelper'
-import defaultAvatar from '../uploads/default-avatar.png'
+import { findBalances } from '../../utils/friendsHelper'
+import { dollarFormatter } from '../../utils/helperFunctions'
+import defaultAvatar from '../../uploads/default-avatar.png'
+import { SingleFriendTransactions } from './SingleFriendTransactions'
 import Box from '@mui/material/Box'
 import Paper from '@mui/material/Paper'
 import Typography from '@mui/material/Typography'
 import Avatar from '@mui/material/Avatar'
-import SingleFriendTransactionsList from './SingleFriendTransactionsList'
-import { dollarFormatter } from '../utils/helperFunctions'
 
 const SingleFriendView = ({ friends, transactions, currentUser }) => {
   var friendBalances = []
@@ -172,7 +172,7 @@ const SingleFriendView = ({ friends, transactions, currentUser }) => {
             )}
           </Box>
         </Box>
-        <SingleFriendTransactionsList
+        <SingleFriendTransactions
           transactions={friendOrUserPaid}
           currentUser={currentUser}
           friend={friend}

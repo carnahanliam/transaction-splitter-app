@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import defaultAvatar from '../uploads/default-avatar.png'
+import defaultAvatar from '../../../uploads/default-avatar.png'
 import Box from '@mui/material/Box'
 import Toolbar from '@mui/material/Toolbar'
 import IconButton from '@mui/material/IconButton'

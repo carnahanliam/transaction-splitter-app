@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
-import { findBalances } from '../utils/friendsHelper'
+import { findBalances } from '../../utils/friendsHelper'
+import { dollarFormatter } from '../../utils/helperFunctions'
+import { SingleFriendBalance } from './SingleFriendBalance'
 import Box from '@mui/material/Box'
 import Paper from '@mui/material/Paper'
 import Typography from '@mui/material/Typography'
 import Divider from '@mui/material/Divider'
-import SingleFriendBalance from './SingleFriendBalance'
-import { dollarFormatter } from '../utils/helperFunctions'
 
 const FriendsList = ({ friends, transactions, currentUser }) => {
   const [activeTab, setActiveTab] = useState('total')

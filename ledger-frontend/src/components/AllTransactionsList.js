@@ -1,11 +1,11 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { dollarFormatter } from '../utils/helperFunctions'
 import Box from '@mui/material/Box'
 import Paper from '@mui/material/Paper'
 import Typography from '@mui/material/Typography'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
 import Divider from '@mui/material/Divider'
-import { dollarFormatter } from '../utils/helperFunctions'
 
 const AllTransctionsList = ({ transactions, currentUser }) => {
   const convertDate = (date) => {

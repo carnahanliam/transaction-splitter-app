@@ -2,9 +2,9 @@ import React from 'react'
 import Grid from '@mui/material/Grid'
 import TextField from '@mui/material/TextField'
 import Box from '@mui/material/Box'
-import MultipleSelectChip from './MultipleSelectChip'
+import MultipleSelectChip from '../../MultipleSelectChip'
 
-const TransDetailsForm = ({
+const TransactionDetails = ({
   handleAmountChange,
   handleTitleChange,
   handleCommentsChange,
@@ -110,4 +110,4 @@ const TransDetailsForm = ({
   )
 }
 
-export default TransDetailsForm
+export default TransactionDetails

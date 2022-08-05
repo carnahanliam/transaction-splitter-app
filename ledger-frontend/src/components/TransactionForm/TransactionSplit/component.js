@@ -5,9 +5,9 @@ import Chip from '@mui/material/Chip'
 import FormControl from '@mui/material/FormControl'
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong'
 import { MenuItem, Select } from '@mui/material'
-import { dollarFormatter } from '../utils/helperFunctions'
+import { dollarFormatter } from '../../../utils/helperFunctions'
 
-const TransSplitForm = ({
+const TransactionSplit = ({
   amount,
   title,
   comments,
@@ -172,4 +172,4 @@ const TransSplitForm = ({
   )
 }
 
-export default TransSplitForm
+export default TransactionSplit

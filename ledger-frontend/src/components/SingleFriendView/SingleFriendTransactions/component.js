@@ -1,17 +1,13 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { dollarFormatter } from '../../../utils/helperFunctions'
 import Box from '@mui/material/Box'
 import Paper from '@mui/material/Paper'
 import Typography from '@mui/material/Typography'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
 import Divider from '@mui/material/Divider'
-import { dollarFormatter } from '../utils/helperFunctions'
 
-const SingleFriendTransactionsList = ({
-  transactions,
-  currentUser,
-  friend,
-}) => {
+const SingleFriendTransactions = ({ transactions, currentUser, friend }) => {
   const convertDate = (date) => {
     var newDate = new Date(date)
     const day = newDate.getDate().toString().padStart(2, '0')
@@ -245,4 +241,4 @@ const SingleFriendTransactionsList = ({
   )
 }
 
-export default SingleFriendTransactionsList
+export default SingleFriendTransactions

@@ -3,14 +3,14 @@ import { Routes, Route, useNavigate } from 'react-router-dom'
 import userService from './services/users'
 import loginService from './services/login'
 import transactionService from './services/transactions'
-import LoginForm from './components/LoginForm'
-import FriendsList from './components/FriendsList'
-import TransactionForm from './components/TransactionForm'
-import SingleFriendView from './components/SingleFriendView'
+import { LoginForm } from './components/LoginForm'
+import { FriendsList } from './components/FriendsList'
+import { TransactionForm } from './components/TransactionForm'
+import { SingleFriendView } from './components/SingleFriendView'
 import SingleTransactionView from './components/SingleTransactionView'
 import AllTransactionsList from './components/AllTransactionsList'
 import AccountSettings from './components/AccountSettings'
-import Navbar from './components/Navbar'
+import { Nav } from './components/Nav'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 import getDesignTokens from './themeMUI'
 
@@ -156,7 +156,7 @@ const App = () => {
         {currentUser !== null && (
           <>
             <div>
-              <Navbar
+              <Nav
                 currentUser={currentUser}
                 handleLogout={handleLogout}
                 paletteMode={paletteMode}
@@ -224,7 +224,7 @@ const App = () => {
                     }
                   />
                 </Routes>
-              </Navbar>
+              </Nav>
             </div>
           </>
         )}
